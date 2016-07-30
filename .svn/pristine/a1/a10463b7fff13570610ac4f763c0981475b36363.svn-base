@@ -1,0 +1,75 @@
+var context;
+var WIDTH;
+var HEIGHT;
+var intervalId = 0;
+var pad = new Pad();
+var balls = [new Ball(), new Ball(), new Ball()];
+
+var startGame = function(canvas) {
+    context = canvas.getContext("2d");
+    WIDTH = canvas.width;
+    HEIGHT = canvas.height;
+    intervalId = setInterval(draw, 10);
+};
+
+var mouseMoveHandler = function(event){
+    var relativeX = event.clientX - canvas.offsetLeft;
+    if(relativeX > pad.paddlew / 2 && relativeX < canvas.width - pad.paddlew / 2) {
+        pad.paddlex = relativeX - pad.paddlew / 2;
+    }
+}
+
+var hittingTheRightAndLeftWalls = function(ball, WIDTH, center, paddleMove){
+    if (center.x + paddleMove.x > WIDTH - ball.ballRadius || center.x + paddleMove.x < ball.ballRadius)
+        paddleMove.x = -paddleMove.x;
+}
+
+var hittingTheTopAndBottomWalls = function(ball, HEIGHT, center, paddleMove){
+    if (center.y + paddleMove.y > HEIGHT - ball.ballRadius)
+        paddleMove.y = -paddleMove.y;
+    else if (center.y + paddleMove.y < ball.ballRadius) {
+        if (center.x > pad.paddlex && center.x < pad.paddlex + pad.paddlew) {
+            paddleMove.y = -paddleMove.y * 2;
+            paddleMove.hits = paddleMove.hits + 1;
+        }
+        else {
+            ball.clearBall = true;
+        }
+    }
+    center.x += paddleMove.x;
+    center.y += paddleMove.y;
+}
+
+var draw = function() {
+    context.clearRect(0, 0, WIDTH, HEIGHT);
+    if(balls[0].clearBall === false) {
+        balls[0].draw_ball(balls[0].redCenter.x, balls[0].redCenter.y, balls[0].ballRadius, 'red');
+        hittingTheRightAndLeftWalls(balls[0], WIDTH, balls[0].redCenter, balls[0].redMove);
+        hittingTheTopAndBottomWalls(balls[0], HEIGHT, balls[0].redCenter, balls[0].redMove);
+    }
+    if(balls[1].clearBall === false) {
+        balls[1].draw_ball(balls[1].blueCenter.x, balls[1].blueCenter.y, balls[1].ballRadius, 'blue');
+        hittingTheRightAndLeftWalls(balls[1], WIDTH, balls[1].blueCenter, balls[1].blueMove);
+        hittingTheTopAndBottomWalls(balls[1], HEIGHT, balls[1].blueCenter, balls[1].blueMove);
+    }
+    if(balls[2].clearBall === false) {
+        balls[2].draw_ball(balls[2].greenCenter.x, balls[2].greenCenter.y, balls[2].ballRadius, 'green');
+        hittingTheRightAndLeftWalls(balls[2], WIDTH, balls[2].greenCenter, balls[2].greenMove);
+        hittingTheTopAndBottomWalls(balls[2], HEIGHT, balls[2].greenCenter, balls[2].greenMove);
+    }
+
+    if(balls[0].redMove.hits === 10)
+        balls[0].ballRadius = balls[0].ballRadius / 4;
+    if(balls[1].blueMove.hits === 10)
+        balls[1].ballRadius = balls[1].ballRadius / 4;
+    if(balls[2].greenMove.hits === 10)
+        balls[2].ballRadius = balls[2].ballRadius / 4;
+
+    pad.draw_pad(pad.paddlex, 0, pad.paddlew, pad.paddleh, 'black');
+
+    if(balls[0].clearBall === true && balls[1].clearBall === true && balls[2].clearBall === true){
+        context.clearRect(0, 0, WIDTH, HEIGHT);
+        pad.draw_pad(pad.paddlex, 0, pad.paddlew, pad.paddleh, 'black');
+        clearTimeout(intervalId);
+    }
+}

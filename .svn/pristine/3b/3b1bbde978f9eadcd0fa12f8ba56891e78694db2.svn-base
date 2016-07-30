@@ -1,0 +1,63 @@
+<!doctype html>
+
+<html manifest="cache.manifest">
+
+<meta charset="UTF-8" />
+
+<body>
+	<header id="title">
+		<h3 align="center">Submit Work Order</h3>
+	</header>
+	<header id="navigation">
+		<section>
+			<article>
+				<form id="workorderform" onsubmit="submitData(document.getElementById('savedmessage'), document.getElementById('tracking'), localStorage, $('#workorderform').serialize()); return clearForm();">
+					<fieldset id="order">
+						<label>Person Creating Work Order:&nbsp;</label>
+						<input autofocus id="nameOfPerson" name="nameOfPerson" required type="text"></input>
+						<br></br>
+						<label>Work Description:&nbsp;</label>
+						<textarea required id = "workDesc" name="workDesc" rows="4" cols="50" maxlength="300"></textarea>
+						<br></br>
+						<label>Date of creation:&nbsp;</label>
+						<input id="dateOfCreation" name="dateOfCreation" required type="date"></input>
+						<br></br>
+						<label>Severity:&nbsp;</label>
+						<input type="radio" name="severity" value="minor" checked>Minor
+						<input type="radio" name="severity" value="major">Major
+						<input type="radio" name="severity" value="urgent">Urgent
+						<br></br>
+						<label>Work Location:</label>
+						<input type="hidden" name="fromlocation" id="fromlocation" value=""></input>
+						<button id="getmylocation" onclick="getGeoLocation(navigator, document.getElementById('fromlocation'), document.getElementById('tracking'), document.getElementById('getmylocation')); return false;">Get my location</button>
+						<span id="tracking"></span>
+					</fieldset>
+					<input value="Submit Order" type="submit"></input>
+					<span id="savedmessage" style="color:red;font-weight:bold"></span>
+				</form>
+			</article>
+		</section>
+	</header>
+	<footer id="copyright">
+		<hr></hr>
+		<p>Copyright &copy;kethamakka_ponugoti 2015. All rights reserved<p>
+	</footer>
+</body>
+
+<head>
+	<link rel="stylesheet" href="css/style.css" type="text/css" />
+	<script src="js/workorder.js"></script>
+	<script src="js/location.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script> 
+	$(document).ready(setCurrentDate(document.getElementById('dateOfCreation')));
+	var clearForm = function(messageSpan, trackingSpan) {
+		$('#workorderform').closest('form').find("input[type=text], textarea, input[type=date]").val("");
+		$('#workorderform').closest('form').find("input[type=date]").val(getCurrentDate());
+		setTimeout(function () { document.getElementById('savedmessage').innerHTML = ''; document.getElementById('tracking').innerHTML ='' }, 2000);
+		return false;
+	}
+	</script>
+</head>
+
+</html>

@@ -1,0 +1,46 @@
+HW 4. Due 11:59PM August 14th
+There will be no reviews for this homework.
+
+1. What are some of the things you learned new in this course?
+
+We have learnt many new things in this course. The following are some of the them to mention:
+
+1. Javascript as a language, before the course, we were in an illusion that it runs only on browser or even to be specific may be we didn’t even know where it runs. Javascript was like a language from hell, which we never understood while we tried to learn it by copy pasting the code from internet.
+
+2. We never heard about CoffeeScript before, which we learnt here in this course and worked on the assignment using CoffeeScript.
+
+3. We learnt how to create offline applications using HTML5.
+
+4. We never heard of express before. However, we learnt many new things about it in this course.
+
+5. We also learnt many new concepts about AJAX and JQuery.
+
+6. We never thought that Test Driven Developement will help modularize our code and we found the difference of how the code looks with TDD and without TDD.
+
+7. We always followed the concept of "Make it work" when developing applications. But, after the course, we now understood that it needs to be modified as "Make it work. Make it better soon".
+
+
+
+2. What's was the most exciting thing you learned?
+
+Everything in the course was exciting to us. Here are some of them to mention in particular:
+
+1. Test driven development in JavaScript using node unit. We never thought testing in JavaScript was so easy. This was the first fun part in the course. It’s so easy to mock and test in JavaScript.
+
+2. We never knew or heard before about the concept of asynchronous callback functions. It was really new and exciting to us to learn such new concepts.
+
+3. We never thought creating animated games was so easy. It was really exciting to us to learn such concepts.
+
+4. The concept of prototypal inheritance seemed to be very powerful concept to us. Prototypes help the users to reuse the modules.
+
+5. One more important aspect of JavaScript that excited us is passing context to a function. Functions are not bound to any class in JavaScript and the context object can be passed to any function, which then executes the function in the context passed to it. 
+
+
+
+3. If you were to pick JavaScript, would you use it for client-side, server-side, neither, or both. Discuss.
+
+We will definitely pick JavaScript for the client side, and we will evaluate before using it on server side. If we feel that it is beneficial in using it in our project, then definitely we shall pick it without backing out. Earlier we had some fear of writing JavaScript code or even reading JavaScript code written by others, but now I guess we are quite comfortable with it.
+
+However, server-side code in most of the project requires seamless integration with database and other stuff. We are not sure if there are such libraries which can make the life of the programmer easier if we pick JavaScript.
+
+Total [10]: 10

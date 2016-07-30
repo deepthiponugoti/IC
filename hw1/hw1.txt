@@ -1,0 +1,94 @@
+Homework 1: Due July 13th, 11:59PM
+
+To answer this question, read, but express the ideas in your own words. If something that you read is very expressive and you like to use it, you can use the exact words, but place the words within quotes and provide reference. Copying and pasting sentences or paragraphs from other sources is considered plagiarism, so don't copy and paste (or type exact words without proper reference).
+
+1. What's hoisting in JavaScript?
+
+Variable/function declarations are always moved (hoisted) to the top of the defining scope by the interpreter and the initializations are left where they were, this mechanism is hoisting. It is a very powerful feature, which is misunderstood by most of the developers. To get a better understanding of this, first we need to understand the scoping. 
+
+JavaScript has function level scoping, which is different from languages like C i.e. only functions can create scope and blocks cannot.
+
+For example (variable hoisting):
+
+	element = 10;
+	console.log(element);	
+	if(true){
+		var element = 20;
+		console.log(element);	
+	}
+	console.log(element);
+	console.log(element1)
+	var element1 = 30
+
+Output:
+10
+20
+20
+undefined
+
+After hoisting element to the top, this is interpreted as:
+
+	var element;
+	var element1;
+	element = 10;
+	console.log(element);
+	if(true){
+		element = 20;
+		console.log(element);
+	}
+	console.log(element);
+	console.log(element1)
+	element1 = 30
+
+Another example (function hoisting):
+
+	func1();
+	func2();
+	function func1() {
+        	console.log("function1 hoisted");
+	}
+	var func2 = function(){
+        	console.log("function2 hoisted");
+	}
+
+Output:
+function1 hoisted
+func2();
+^
+TypeError: undefined is not a function
+
+func1 is hoisted along with the body of the function. func2 variable is hoisted, but the body is left behind.
+
+2. What's the difference between calling a function directly and calling it with call or apply?
+
+Context is the environment in which group of statements executes. We have the provision to pass the context to a function or it runs under a default context. If we call the function directly then the function is executed under global context. Call/apply allows us to specify the context to the function as the first argument. When a function is called on, an object 'this' is set to the object on which the function is called.
+
+Functions are not bound to any class in javascript and the context object can be passed to any function, which then executes the function in the context passed to it. 
+
+For example:
+
+var fn = function() {
+	console.log('Hello '+this)
+}
+
+fn('Venkat')
+fn.call('Venkat')
+fn.apply('Venkat')
+
+Output:
+Hello [object global]
+Hello Venkat
+Hello Venkat
+
+Here ‘Venkat’ is context of the function fn when we call it using call/apply and [object global] is the default context when we call the function directly.
+
+Javascript is a single threaded language, and when the code is first executed by the interpreter, by default it enters the global execution context. Each function invocation from now on will result in a new execution context. All these execution contexts are stored on an execution stack and the current execution context at the top of the stack will be executed before moving onto the ones that are below. Each execution context is bound with a scope chain which contains a variable object and is used in determining the variable access. So the scope of an object is determined by the execution context of it which is in-turn used by the interpreter.
+
+3. When would you use call vs. apply?
+
+We use call when we know the exact number of arguments that are to be passed to the function.
+Otherwise apply is preferred i.e. when we don’t know the number of arguments that should be passed to the function.
+
+Example: sample_programs/callVsApply.js
+
+Total [10]: 10

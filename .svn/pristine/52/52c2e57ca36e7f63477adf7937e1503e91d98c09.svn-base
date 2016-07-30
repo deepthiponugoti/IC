@@ -1,0 +1,16 @@
+html().
+	<canvas id="myCanvasOne" width="400" height="400">If you see this message, sorry canvas not supported</canvas>
+	<canvas id="myCanvasTwo" width="400" height="400">If you see this message, sorry canvas not supported</canvas>
+	<head>
+		<link rel="stylesheet" href="/stylesheets/style.css" type="text/css"/>
+		<script src="/javascripts/angular/angular.js"></script>
+		<script src='/javascripts/drawCanvas.js'></script>
+		<script>
+		var canvasOne = document.getElementById('myCanvasOne');
+		var canvasTwo = document.getElementById('myCanvasTwo');
+		</script>
+		<script>
+		startGame(canvasOne);
+		startGame(canvasTwo);
+		</script>
+	</head>

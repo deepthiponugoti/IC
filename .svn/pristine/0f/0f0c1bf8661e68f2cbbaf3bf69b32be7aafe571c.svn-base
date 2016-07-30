@@ -1,0 +1,84 @@
+var Ball = function(xPos, yPos, ballColor, xDisp, yDisp){
+	this.x = xPos,
+	this.y = yPos,
+	this.lastX =0,
+	this.lastY =0,
+	this.radius = canvas.width / 20,
+	this.xDisplacement = xDisp,
+	this.yDisplacement = yDisp,
+	this.color = ballColor,
+	this.padHitCount = 0
+}
+
+Ball.prototype.drawBall = function(x,y,r, color) {
+    context.beginPath();
+    context.arc(x, y, r, 0, Math.PI*2, true);
+    context.fillStyle = color;
+    context.closePath();
+    context.fill();
+}
+
+Ball.prototype.ballCollisionTest = function(ballTwo) {
+      var retVal = false;
+      var x = this.x - ballTwo.x;
+      var y = this.y - ballTwo.y;
+      var distance = (x * x + y * y);
+      if (distance <= (this.radius + ballTwo.radius) * (this.radius + ballTwo.radius) ) {
+        retVal = true;
+      }
+      return retVal;
+}
+
+Ball.prototype.hittingTheRightAndLeftWalls = function(ball, WIDTH){
+	if(ball.x + ball.radius > canvas.width
+		|| ball.x - ball.radius < 0){
+		ball.xDisplacement = -ball.xDisplacement;
+		ball.x = ball.lastX;
+		ball.y = ball.lastY;
+	}
+}
+
+Ball.prototype.hittingTheTopAndBottomWalls = function(ball, HEIGHT){
+	if(ball.y + ball.radius  > canvas.height) {
+		
+		ball.yDisplacement = -ball.yDisplacement;
+		ball.x = ball.lastX;
+		ball.y = ball.lastY;
+	} 
+	else if(ball.y - ball.radius < paddle.paddleProperties.height
+			 &&
+			((ball.x + ball.radius > paddle.paddleProperties.start &&
+				ball.x + ball.radius < paddle.paddleProperties.start + paddle.paddleProperties.width)
+			|| (ball.x - ball.radius > paddle.paddleProperties.start &&
+				ball.x - ball.radius < paddle.paddleProperties.start + paddle.paddleProperties.width)))
+				{			
+		ball.yDisplacement = -ball.yDisplacement;
+		ball.x = ball.lastX;
+		ball.y = ball.lastY;
+
+        ball.padHitCount++;
+
+		ball.xDisplacement = 1.1 * ball.xDisplacement;
+		ball.yDisplacement = 1.1 * ball.yDisplacement;
+		
+		if(ball.padHitCount === 10){
+			ball.radius = ball.radius / 4;
+			ball.padHitCount = 0;
+		}
+	}
+	else if (ball.y + ball.radius < 0 ){
+		
+		var selectBall = function(ballInArray){
+			if(ball.color === ballInArray.color)
+				return false;
+			return true;
+		}
+		balls = balls.filter(selectBall);
+	}		
+}
+
+	Ball.prototype.hittingTheWalls = function(ball, HEIGHT, center){
+	Ball.prototype.hittingTheRightAndLeftWalls(ball, HEIGHT, center);
+	Ball.prototype.hittingTheTopAndBottomWalls(ball, HEIGHT, center);	
+}
+

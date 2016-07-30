@@ -1,0 +1,86 @@
+var express = require('express');
+var router = express.Router();
+
+var users = [];
+var currentUser;
+
+router.post('/', function(req, res, next) {
+	var user = {username: req.body.username, waitingFlag: true , invitedBy: []};
+	users.push(user);
+	currentUser = user;
+	
+	res.render('game');
+	res.end();
+});
+
+
+var ignoreIfWaitingFalse = function(user){
+	if (user.waitingFlag === false)
+		return false;
+	return true;
+}
+
+router.get('/users', function(req, res, next) {
+	res.send(users.filter(ignoreIfWaitingFalse));
+});
+  
+router.get('/currentUser', function(req, res, next) {
+	res.send(currentUser);
+});
+
+var markUserInvited = function(invitedUser, invitedBy){
+	for(var i=0; i < users.length; i++){
+		if(users[i].username === invitedUser.username){
+			users[i].invitedBy.push(invitedBy);
+		}
+	}
+	console.log(users);
+}
+
+var RemoveUserFromInvitedBy = function(invitedBy, invitedUser){
+	for(var i=0; i < users.length; i++){
+		if(users[i].username === invitedUser.username){
+			console.log("Hello");
+			users[i].invitedBy.splice(indexOfElementToBeRemoved, 1);
+			console.log(indexOfElementToBeRemoved);
+		}
+	}
+}
+
+var indexOfElementToBeRemoved = function(user){
+	for(var i=0; i < users.length; i++){
+		if(user.username === invitedBy.username){
+			return i;
+		}
+	}
+}
+
+router.post('/updateCurrentUser', function(req, res, next) {
+	var user = req.body.user;
+	var currentUserr;
+	for(var i=0; i < users.length; i++){
+		if(users[i].username === user.username){
+			currentUserr = users[i];
+		}
+	}
+	res.send(currentUserr);
+});
+
+router.post('/inviteUser', function(req, res, next) {
+	var invitedUser = req.body.invitedUser;
+	var currentUserr = req.body.currentUser;
+	markUserInvited(invitedUser, currentUserr);
+	res.send('success');
+});
+
+router.post('/removeInvitedBy', function(req, res, next) {
+	var invitedUser = req.body.invitedUser;
+	var invitedBy = req.body.invitedBy;
+	RemoveUserFromInvitedBy(invitedBy, invitedUser);
+	res.send('success');
+});
+
+
+
+
+module.exports = router;

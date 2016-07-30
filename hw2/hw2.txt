@@ -1,0 +1,40 @@
+HW 2. Due 11:59PM July 21st
+
+1. What language are you most familiar with?
+
+We are most familiar with Java.
+
+2. From that language point of view, how is JavaScript similar or different?
+
+Java is a statically and strongly typed language where as JavaScript is dynamically and weakly typed language.  
+
+Hoisting and lexical scoping are some of the of the important concepts in JavaScript. We use a lot of closures and lexical scoping in JavaScript. Java supports block based scoping where as JavaScript supports function based scoping.
+
+When dealing with exceptions, JavaScript can throw any type of exceptions where as in Java we need to specify the type of exceptions thrown or caught. 
+ 
+There is no concept called constructors in JavaScript. It is just that constructor is another function. We do not create classes in JavaScript. We create constructors. However, we create classes, objects and constructors in Java. JavaScript supports prototypal inheritance (object based) which acts as a greater benefit to it where as Java supports class based inheritance.
+
+Both Java 8 and JavaScript support functional style of programming.
+
+3. What are some of the things that excited you as you learn JavaScript?
+
+The concept of prototypal inheritance seemed to be very powerful concept to us. Prototypes help the users to reuse the modules. 
+
+One more important aspect of JavaScript that excited us is passing context to a function. Functions are not bound to any class in JavaScript and the context object can be passed to any function, which then executes the function in the context passed to it. 
+
+JavaScript is a single threaded language. So in synchronous programming, if we want to get data from the database or send a HTTP request to a server we are blocking the thread. The Concept of making the methods asynchronous solves this problem. 
+
+Creating mock objects is fairly simple in JavaScript. We can just create a function and add it to the prototype.
+
+4. What are some of the things that concerns you with JavaScript?
+
+Because of asynchronous programming, JavaScript involves use of many callback functions. The context in which the current function is running might be a bit confusing because of these callbacks.
+
+The confusion of using == or = to compare two variables instead of ===.
+
+JavaScript lacks static typing. Detecting some of the errors at compile time will help during the development phase rather than everything blowing up at the run time. Use of "use strict" solves some of these problems.
+
+The use of conventions to create constructors (name of the constructor to start with a capital letter) may mislead the developers because JavaScript constructors are nothing but functions.
+
+Total[10]: 10
+	

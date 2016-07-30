@@ -1,0 +1,77 @@
+var Ball = function(){
+}
+
+Ball.prototype.draw_ball = function(x,y,r, color) {
+    context.beginPath();
+    context.arc(x, y, r, 0, Math.PI*2, true);
+    context.fillStyle = color;
+    context.closePath();
+    context.fill();
+}
+
+Ball.prototype.ballRadius = canvas.width / 20;
+
+Ball.prototype.redCenter = {
+    x: canvas.width / 2,
+    y: canvas.height / 2
+};
+
+Ball.prototype.blueCenter = {
+    x: 150,
+    y: 50
+};
+
+Ball.prototype.greenCenter = {
+    x: 50,
+    y: 150
+};
+
+Ball.prototype.redMove = {
+    x: 2,
+    y: canvas.width / 100,
+    hits: 0
+};
+
+Ball.prototype.blueMove = {
+    x: 2,
+    y: canvas.width / 100,
+    hits: 0
+};
+
+Ball.prototype.greenMove = {
+    x: 2,
+    y: canvas.width / 100,
+    hits: 0
+};
+
+Ball.prototype.clearBall = false;
+
+var initBallsCenters = function(balls){
+    balls[0].redCenter.x = Math.floor(Math.random() * 471) + 10;
+    balls[0].redCenter.y = Math.floor(Math.random() * 471) + 10;
+    balls[1].blueCenter.x = Math.floor(Math.random() * 471) + 10;
+    balls[1].blueCenter.y = Math.floor(Math.random() * 471) + 10;
+    balls[2].greenCenter.x = Math.floor(Math.random() * 471) + 10;
+    balls[2].greenCenter.y = Math.floor(Math.random() * 471) + 10;
+}
+
+Ball.prototype.hittingTheRightAndLeftWalls = function(WIDTH, center, paddleMove){
+    if (center.x + paddleMove.x > WIDTH - this.ballRadius || center.x + paddleMove.x < this.ballRadius)
+        paddleMove.x = -paddleMove.x;
+}
+
+Ball.prototype.hittingTheTopAndBottomWalls = function(HEIGHT, center, paddleMove, pad){
+    if (center.y + paddleMove.y > HEIGHT - this.ballRadius)
+        paddleMove.y = -paddleMove.y;
+    else if (center.y + paddleMove.y < this.ballRadius) {
+        if (center.x > pad.paddlex && center.x < pad.paddlex + pad.paddlew) {
+            paddleMove.y = -paddleMove.y * 2;
+            paddleMove.hits = paddleMove.hits + 1;
+        }
+        else {
+            this.clearBall = true;
+        }
+    }
+    center.x += paddleMove.x;
+    center.y += paddleMove.y;
+}

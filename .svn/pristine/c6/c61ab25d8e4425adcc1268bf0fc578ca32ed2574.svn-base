@@ -1,0 +1,64 @@
+var context;
+var center;
+var WIDTH;
+var HEIGHT;
+var intervalId = 0;
+var pad = new Pad();
+var ball = new Ball();
+
+var startGame = function(canvas) {
+    context = canvas.getContext("2d");
+    WIDTH = canvas.width;
+    HEIGHT = canvas.height;
+    center = {
+        x: WIDTH/2,
+        y: HEIGHT/2
+    }
+    intervalId = setInterval(draw, 10);
+};
+
+var rightDown = false;
+var leftDown = false;
+
+var mouseHandler = function(e){
+    var relativeX = e.clientX - canvas.offsetLeft;
+    if(relativeX > 0 && relativeX < canvas.width) {
+        pad.paddlex = relativeX - pad.paddlew / 2;
+    }
+}
+
+var onKeyDown = function(evt) {
+    if (evt.keyCode == 39) rightDown = true;
+    else if (evt.keyCode == 37) leftDown = true;
+}
+
+var onKeyUp = function(evt) {
+    if (evt.keyCode == 39) rightDown = false;
+    else if (evt.keyCode == 37) leftDown = false;
+}
+
+var draw = function() {
+    context.clearRect(0, 0, WIDTH, HEIGHT);
+    ball.draw_ball(center.x, center.y, ball.ballRadius);
+
+    if (rightDown) pad.paddlex += 5;
+    else if (leftDown) pad.paddlex -= 5;
+    pad.draw_pad(pad.paddlex, 0, pad.paddlew, pad.paddleh);
+
+    if (center.x + pad.paddleMove.x > WIDTH - ball.ballRadius || center.x + pad.paddleMove.x < ball.ballRadius)
+        pad.paddleMove.x = -pad.paddleMove.x;
+
+    if (center.y + pad.paddleMove.y > HEIGHT - ball.ballRadius)
+        pad.paddleMove.y = -pad.paddleMove.y;
+    else if (center.y + pad.paddleMove.y < ball.ballRadius) {
+        if (center.x > pad.paddlex && center.x < pad.paddlex + pad.paddlew)
+            pad.paddleMove.y = -pad.paddleMove.y;
+        else {
+            clearInterval(intervalId);
+            document.location.reload();
+        }
+    }
+
+    center.x += pad.paddleMove.x;
+    center.y += pad.paddleMove.y;
+}

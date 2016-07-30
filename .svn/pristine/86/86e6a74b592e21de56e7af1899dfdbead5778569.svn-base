@@ -1,0 +1,46 @@
+[Venkat 08/12/15 04:37 AM MDT]
+review: nice progress
+
+Show one board, show on that one board where your ships are and where
+the opponents ships are once exposed. User would also like to know the
+cells they already targeted.
+
+In Jade, use ng-repeat instead of for loop where possible.
+
+See the test checked in to show how to test poll (required redesign).
+
+------------------------------------------------------------------------------
+[Venkat 08/11/15 03:44 AM MDT]
+review: simplify
+
+Check coverage.
+
+playGame.jade - too much html in there.
+
+Why not use html table instead of canvas, will that not be simpler?
+
+------------------------------------------------------------------------------
+[Venkat 08/09/15 04:47 AM CDT]
+review: nice progress
+
+include html? Pick up Jade, it's not that hard, break out of your comfort zone.
+
+Move on to implement accept/invite.
+
+Check coverage.
+
+------------------------------------------------------------------------------
+[Venkat 08/08/15 07:14 AM CDT]
+review: good start
+
+1. Visited page, entered Joe, seeing welcome page.
+
+2. Visited using another browser, entered Bob, seeing Joe in the welcome page.
+
+3. Joe should see Bob now. Also, when Bob clicks invite, nothing is happening.
+
+In jade file, don't write raw HTML!
+
+Check coverage.
+
+------------------------------------------------------------------------------

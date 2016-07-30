@@ -1,0 +1,15 @@
+[Venkat 08/05/15 05:48 AM CDT]
+review: good start
+
+Fill the date of creation with the current date as default.
+
+When button is submitted, give a clue to the user what happened,
+saved locally or sent to the server.
+
+Embrace test driven development, at least make an effort.
+
+Give a better name than functions.js for this file.
+
+Change app.js to server.js to easily identify this is the server to use.
+
+------------------------------------------------------------------------------

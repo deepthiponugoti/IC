@@ -1,0 +1,25 @@
+html(ng-app='battleship')
+  head
+    script(src='/javascripts/angular/angular.js')
+    script(src='/javascripts/gameController.js')
+    link(rel='stylesheet', href='/stylesheets/style.css', type='text/css')
+  body(ng-controller='GameController as controller')
+    header#navigation(align='center')
+      fieldset#heading
+        h3 Hello {{controller.currentUser.username}}, you are now logged
+        h4 Welcome to game of battle ship
+    fieldset#inviteUsers
+      h4 List of users online: 
+      div
+        table.users(border='1')
+          tr
+            th Name
+            th Invitation
+          tr(ng-repeat='user in controller.users')
+            td {{ user.username }}
+            td
+              input(type='button', value='invite', ng-click='controller.inviteUser(user)', ng-disabled='controller.conditionToDisableIniviteAndInvitor(user)')
+            td(ng-if='controller.condtionToInvite(user)')
+              input(type='button', value='accept', ng-click='controller.acceptPlayRequest(user)')
+            td(ng-if='controller.condtionToInvite(user)')
+              input(type='button', value='decline', ng-click='controller.declinePlayRequest(user)')

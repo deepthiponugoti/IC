@@ -1,0 +1,7 @@
+var gameController = function($http, $filter, $document) {
+	var controller = this;
+	controller.users =  ['ravi', 'koushik', 'deepthi'];
+}
+
+angular.module('battleship', [])
+       .controller('GameController', gameController);

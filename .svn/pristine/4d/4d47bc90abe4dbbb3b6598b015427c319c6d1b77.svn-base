@@ -1,0 +1,11 @@
+CACHE MANIFEST
+# rev 107
+
+CACHE:
+/js/workorder.js
+/js/location.js
+/index.html
+/css/style.css
+
+NETWORK:
+*

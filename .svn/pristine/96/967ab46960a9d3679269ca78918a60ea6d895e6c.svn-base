@@ -1,0 +1,86 @@
+describe('playgameControllerTest', function() {
+	var controller;;
+	beforeEach(module('playbattleship'));
+	
+	beforeEach(inject(function($controller, _$httpBackend_) {
+		controller = $controller('PlayGameController');
+		$httpBackend = _$httpBackend_;
+	}));
+	
+	it('test if updateUserNames sets usernames properly', function() {
+		controller.updateUserNames('?user=Ravi&playingWith=Ravi1');
+		expect(controller.currentUser.username).to.be.eql('Ravi');
+		expect(controller.playingWith.username).to.be.eql('Ravi1');
+	});
+	
+	it('test placeYourShip should push the ship position into array and return true', function() {
+		var flag = controller.placeYourShip(1, 1);
+		expect(controller.currentUser).to.be.eql({shipsAt: [ '1_1' ]});
+		expect(flag).to.be.eql(true);
+	});
+	
+	it('test placeYourShip should not push the ship and return false if ship count is already 5', function() {
+		controller.currentUser = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		var flag = controller.placeYourShip(1, 9);
+		expect(controller.currentUser).to.be.eql(controller.currentUser);
+		expect(flag).to.be.eql(false);
+	});
+	
+	it('test placeYourShip should not push the ship and return true if ship already present', function() {
+		controller.currentUser = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		var flag = controller.placeYourShip(1, 1);
+		expect(controller.currentUser).to.be.eql(controller.currentUser);
+		expect(flag).to.be.eql(true);
+	});
+	
+	it('test fireTheShip: if ship is present returns true, increment hit count', function() {
+		controller.playingWith = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		controller.results = {shipsHit:1};
+		var flag = controller.fireTheShip(1, 1);
+		expect(flag).to.be.eql(true);
+		expect(controller.results.shipsHit).to.be.eql(2);
+	});
+	
+	it('test fireTheShip: if shipsHit is 4 returns true, increment hit count, and update game result', function() {
+		controller.playingWith = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		controller.results = {shipsHit:4};
+		var flag = controller.fireTheShip(1, 1);
+		expect(flag).to.be.eql(true);
+		expect(controller.gameResult).to.be.eql('Won');
+		expect(controller.gameOver).to.be.eql(true);
+		expect(controller.results.shipsHit).to.be.eql(5);
+	});
+	
+	it('test fireTheShip: if ship is not present update miss count and return false', function() {
+		controller.playingWith = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		controller.results = {shipsMiss:4};
+		var flag = controller.fireTheShip(4, 1);
+		expect(flag).to.be.eql(false);
+		expect(controller.results.shipsMiss).to.be.eql(5);
+	});
+	
+	it('test detailsReceived, set playngWith and updates opponent turn message', function() {
+		controller.detailsReceived({user:{shipsAt:['1_1']}, turn:false});
+		expect(controller.playingWith).to.be.eql({shipsAt: ['1_1']});
+		expect(controller.whoseturn).to.be.eql("Opponents turn, please wait for your turn");
+	});
+	
+	it('test detailsReceived, set playngWith and updates your turn message', function() {
+		controller.detailsReceived({user:{shipsAt:['1_1']}, turn:true});
+		expect(controller.playingWith).to.be.eql({shipsAt: ['1_1']});
+		expect(controller.whoseturn).to.be.eql("Your turn to play, hit the block and try to sink a ship");
+	});
+	
+	it('test sendDetailsToOtherUser, which is a service call, sends data and recevies data.', function() {
+		controller.currentUser = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		controller.playingWith = {shipsAt: []};
+		
+		$httpBackend.expectPOST('/gameplay/senddetails' , {details:{user: controller.currentUser, playingWith: controller.playingWith, turn:false}})
+			.respond(200, {user:{shipsAt:['1_1']}, turn:true});
+		controller.sendDetailsToOtherUser();
+		$httpBackend.flush();
+		
+		expect(controller.playingWith).to.be.eql({shipsAt: ['1_1']});
+	});
+	
+});

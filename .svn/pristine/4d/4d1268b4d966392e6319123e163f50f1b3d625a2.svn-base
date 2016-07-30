@@ -1,0 +1,17 @@
+[Venkat 08/02/15 05:41 AM CDT]
+review: A few things to fix
+
+When the pad hits the border it shrinks.
+Show the border of the box.
+The ball should escape and disappear if not blocked.
+
+------------------------------------------------------------------------------
+[Venkat 08/01/15 04:24 AM CDT]
+review: good start
+
+No need for keyboard events, instead use mouse and touch events.
+
+See email to the mailing list where I recommended creating good abstractions
+and instead of scattered variables. Accidental complexity will go through the roof if we keep many variables and functions, all in the file scope.
+
+------------------------------------------------------------------------------

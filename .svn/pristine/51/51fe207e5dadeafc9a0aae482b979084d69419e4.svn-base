@@ -1,0 +1,33 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+
+fieldset {
+  border-radius: 10px;
+  box-shadow: 15px 15px 15px #D2D7D2
+}
+
+input, textarea {
+  border-radius: 10px;
+  background-color: rgba(210, 215, 210, 0.50); 
+}
+
+table#table1, table#table2, th, td {
+	border-collapse:collapse;
+    border: 1px solid black;
+	width: 400px;
+	height: 30px;
+}
+
+table#table1{
+	float:left;
+}
+table#table2{
+	float:right;
+}

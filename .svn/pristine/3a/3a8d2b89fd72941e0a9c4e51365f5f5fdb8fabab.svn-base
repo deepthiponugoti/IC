@@ -1,0 +1,41 @@
+var Ball = function(){
+}
+
+Ball.prototype.draw_ball = function(x,y,r, color) {
+    context.beginPath();
+    context.arc(x, y, r, 0, Math.PI*2, true);
+    context.fillStyle = color;
+    context.closePath();
+    context.fill();
+}
+Ball.prototype.ballRadius = 10;
+
+Ball.prototype.redCenter = {
+    x: canvas.width / 2,
+    y: canvas.height / 2
+};
+
+Ball.prototype.blueCenter = {
+    x: 50,
+    y: 50
+};
+
+Ball.prototype.greenCenter = {
+    x: 100,
+    y: 100
+};
+
+Ball.prototype.redMove = {
+    x: 2,
+    y: 4
+};
+
+Ball.prototype.blueMove = {
+    x: 2,
+    y: 4
+};
+
+Ball.prototype.greenMove = {
+    x: 2,
+    y: 4
+};

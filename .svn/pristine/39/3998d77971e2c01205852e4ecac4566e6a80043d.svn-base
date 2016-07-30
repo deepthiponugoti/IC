@@ -1,0 +1,31 @@
+<!doctype html>
+
+<html manifest="cache.manifest">
+<meta charset="UTF-8" />
+<body>
+	<header id="navigation">
+		<section>
+			<article>
+				<h3>Submit Work Order</h3>
+				<form id="workorderform">
+					<fieldset id="order">
+						<label>Person Creating Work Order</label>
+						<input id="nameOfPerson" name="nameOfPerson" required type="text"></input>
+						<br></br>
+						<label>Work Description:</label>
+						<textarea required id = "workDesc" name="workDesc" rows="4" cols="50" maxlength="300"></textarea>
+						<br></br>
+					</fieldset>
+					<input value="Submit Order" type="submit"></input>
+				</form>
+			</article>
+		</section>
+	</header>
+</body>
+
+<head>
+	<script src="js/functions.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script> submitData(); </script>
+</head>
+</html>

@@ -1,0 +1,98 @@
+describe('workordertests', function () {
+	
+	var clock;
+	
+	beforeEach(function() {
+		clock = sinon.useFakeTimers(new Date(2015,9,1).getTime());
+        sinon.spy($, 'get');
+	});
+	
+	afterEach(function() {
+		clock.restore();
+        $.get.restore();
+	});
+	
+	it('canary should pass', function() {
+		expect(true).to.be.eql(true);
+	});
+	
+	it('store locally data, localStorage currently has nothing', function() {
+		var data = {name:'test'};
+		var localStorage = {};
+		storeLocally(data, localStorage);
+		
+		expect({workOrder0:{name:'test'}, workOrderCount:0}).to.be.eql(localStorage);
+	});
+	
+	it('store locally data, localStorage currently has a value', function() {
+		var data = {name:'test1'};
+		var localStorage = {workOrder0:{name:'test'}, workOrderCount:0};
+		storeLocally(data, localStorage);
+		
+		expect({workOrder0:{name:'test'},workOrder1:{name:'test1'}, workOrderCount:1}).to.be.eql(localStorage);
+	});
+	
+	it('test if returnCurrentDate return correct date', function() {
+		expect(getCurrentDate()).to.be.eql('2015-10-01');
+	});
+	
+	
+	it('test if setCurrentDate sets date to the tag', function() {
+		var dataTag = {value:''}
+		setCurrentDate(dataTag);
+		expect({value:'2015-10-01'}).to.be.eql(dataTag);
+	});
+	
+	it('submitFromData should make an ajax call', function() {
+		sinon.spy($, 'ajax');
+		submitFromData({foo:'bar'});
+		expect($.ajax.calledOnce).to.be.eql(true);
+		expect($.ajax.getCall(0).args[0].url).to.be.eql('/workorder');
+		expect($.ajax.getCall(0).args[0].data).to.be.eql({foo:'bar'});
+		$.ajax.restore();
+	});
+	
+	it('test sendToServer submits a data and sets message span', function(){
+		var messagespan = {innerHTML: ""};
+		var localStorage = {workOrder0: "nameOfPerson=asdasd", workOrderCount: "0", clear: function() {
+			
+		}};
+		sendToServer(messagespan, localStorage);
+		expect(messagespan).to.be.eql({innerHTML: "Saved data on the server."});
+	});
+	
+	it('test sendToServer submits a data and clears data', function(){
+		var messagespan = {innerHTML: ""};
+		var data = "";
+		var localStorage = {workOrder0: "nameOfPerson=asdasd", workOrderCount: "0", clear: function() {
+			data = "data cleared";
+		}};
+		sendToServer(messagespan, localStorage);
+		expect(data).to.be.eql("data cleared");
+	});
+
+    it('invokeIfConnected to check if connected to server', function() {
+        var flag = false;
+        var messageSpan = {innerHTML: ""};
+        var successFn = function(message, storage){
+            flag = true;
+        }
+        invokeIfConnected(successFn, messageSpan, {});
+        var success = $.get.getCall(0).args[1];
+        success();
+        expect(flag).to.be.eql(true);
+    });
+
+   /* it('invokeIfConnected to check if connected to server', function() {
+        var flag = false;
+        var messageSpan = {innerHTML: ""};
+        var successFn = function(message, storage){
+            flag = true;
+        }
+        get = {fail : function(){
+            messageSpan.innerHTML = "Saved data locally due to network unavailabilty or server failure.";
+        }};
+        invokeIfConnected(successFn, messageSpan, {});
+        expect(messageSpan.innerHTML).to.be.eql("Saved data locally due to network unavailabilty or server failure.");
+    });*/
+});

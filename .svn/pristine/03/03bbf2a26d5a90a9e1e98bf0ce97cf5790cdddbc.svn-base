@@ -1,0 +1,59 @@
+var express = require('express');
+var router = express.Router();
+
+var users = [];
+var currentUser;
+
+router.post('/', function(req, res, next) {
+	var user = {username: req.body.username, waitingFlag: true , userInvited: false, invitedBy: {}};
+	users.push(user);
+	currentUser = user;
+	
+	res.render('game');
+	res.end();
+});
+
+
+var ignoreIfWaitingFalse = function(user){
+	if (user.waitingFlag === false)
+		return false;
+	return true;
+}
+
+router.get('/users', function(req, res, next) {
+	res.send(users.filter(ignoreIfWaitingFalse));
+});
+  
+router.get('/currentUser', function(req, res, next) {
+	res.send(currentUser);
+});
+
+var markUserInvited = function(user, invitedBy){
+	for(var i=0; i < users.length; i++){
+		if(users[i].username === user.username){
+			users[i].userInvited = true;
+			users[i].invitedBy = invitedBy;
+		}
+	}
+}
+
+router.post('/updateCurrentUser', function(req, res, next) {
+	var user = req.body.user;
+	var currentUserr;
+	for(var i=0; i < users.length; i++){
+		if(users[i].username === user.username){
+			currentUserr = users[i];
+		}
+	}
+	res.send(currentUserr);
+});
+
+router.post('/inviteUser', function(req, res, next) {
+	var invitedUser = req.body.invitedUser;
+	var currentUserr = req.body.currentUser;
+	markUserInvited(invitedUser, currentUserr);
+	res.send('success');
+});
+
+
+module.exports = router;

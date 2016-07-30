@@ -1,0 +1,63 @@
+[Venkat 07/18/15 11:07 AM CDT]
+review: fix grunt build
+
+First ensure there are no modified files in the current directory.
+Now run grunt and everything work fine.
+Now run grunt again and the test fails with message:
+Fatal error: Cannot find module './weatherRetrievalCoffee.js'
+
+Ensure that Grunt does not leave the code in a state where tests can't be repeated.
+
+CoffeeScript: remove semicolons. Don't use the word return.
+
+------------------------------------------------------------------------------
+[Venkat 07/17/15 07:00 AM CDT]
+review: You're almost done with the JavaScript part
+
+Remove some noise.
+
+------------------------------------------------------------------------------
+[Venkat 07/16/15 06:55 AM CDT]
+review: nice progress
+
+See suggestions for improvement in code.
+
+Gruntfile: dirverprogram spell check
+
+------------------------------------------------------------------------------
+[Venkat 07/15/15 10:02 AM CDT]
+review: refactor, check coverage
+
+Check coverage report.
+
+Test will fail if you depend precisely on data from the web - after all
+temperature changes!
+
+Embrace asynchrony.
+
+Refactor, see suggestions in code.
+
+------------------------------------------------------------------------------
+[Venkat 07/14/15 08:19 AM CDT]
+review: a few things to improve
+
+Use libraries instead of including code from other sources.
+If you use code form other courses, give attribution. Never include
+someone else's code without attribution. It's called cheating if done
+without attribution. Using a dependency library makes the attribution
+implicit and obvious.
+
+Too many files, reduce. Start with one file, if we need we can create
+more later.
+
+Nice tests.
+
+Bread into logical steps and let the tests move along those steps.
+Read WOEIDs from a file.
+Get data for one WOEID.
+Parse the data
+Sort the data
+Get data for multiple WOEIDs
+...
+
+------------------------------------------------------------------------------

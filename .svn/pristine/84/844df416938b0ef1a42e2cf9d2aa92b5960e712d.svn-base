@@ -1,0 +1,83 @@
+var playGameController = function($http, $document, $location, $timeout) {
+	var controller = this;
+	controller.currentUser = {shipsAt:[]};
+	controller.playingWith = {shipsAt:[]};
+	controller.results = {shipsHit:0, shipsMiss:0};
+	controller.gameResult = '';
+	controller.gamestarted = false;
+	controller.gameOver = false;
+	controller.sendDetails = true;
+	controller.whoseturn = "The game will start once both the users places their battle ships"
+	controller.myturn = false;
+	
+	var updateUserNames = function(urlParams) {
+		var split = urlParams.split('&');
+		if(split.length === 2){
+			controller.currentUser.username = split[0].split('=')[1]
+			controller.playingWith.username = split[1].split('=')[1]
+		}
+	}
+	
+	var placeYourShip = function(i, j) {
+		var shipat = i + '_' + j;
+		if(controller.currentUser.shipsAt.indexOf(shipat) >= 0){
+			return true;
+		}else if(controller.currentUser.shipsAt.length === 5){
+			return false;
+		}else{
+			controller.currentUser.shipsAt.push(i + '_' + j);
+			return true;
+		}
+	}
+	
+	var fireTheShip = function(i, j) {
+		var clickedAt = i + '_' + j;
+		if(controller.playingWith.shipsAt.indexOf(clickedAt) >= 0){
+			controller.results.shipsHit += 1;
+			if(controller.results.shipsHit === 5){
+				controller.gameResult = 'Won';
+				controller.gameOver = true;
+			}
+			return true;
+		}else{
+			controller.results.shipsMiss += 1;
+			return false;
+		}
+	}
+	
+	var sendDetailsToOtherUser = function() {
+		if(controller.currentUser.shipsAt.length === 5 && controller.playingWith.shipsAt.length != 5){
+			$http.post('/gameplay/senddetails', {details:{user: controller.currentUser, playingWith: controller.playingWith, turn:false}}).success(detailsReceived);
+		}
+	}
+	
+	var detailsReceived = function(data) {
+		if(typeof data.user != 'undefined'){
+			controller.playingWith = data.user;
+		}
+		controller.myturn = data.turn;
+		if(controller.myturn){
+			controller.whoseturn = "Your turn to play, hit the block and try to sink a ship";
+		}else{
+			controller.whoseturn = "Opponents turn, please wait for your turn";
+		}
+	}
+	
+	controller.detailsReceived = detailsReceived;
+	controller.sendDetailsToOtherUser = sendDetailsToOtherUser;
+	controller.placeYourShip = placeYourShip;
+	controller.fireTheShip = fireTheShip;
+	controller.updateUserNames = updateUserNames;
+	controller.updateUserNames(location.search.substring(1));
+
+	var poll = function() {
+	        $timeout(function() {
+				controller.sendDetailsToOtherUser();
+	            poll();
+	        }, 1000);
+	    };  
+	poll();
+}
+
+angular.module('playbattleship', [])
+	.controller('PlayGameController', playGameController);

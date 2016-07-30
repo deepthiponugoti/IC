@@ -1,0 +1,5 @@
+var Box = function(){
+}
+
+Box.prototype.WIDTH = canvas.width;
+Box.prototype.HEIGHT = canvas.height;

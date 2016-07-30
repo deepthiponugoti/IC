@@ -1,0 +1,78 @@
+var context;
+var box = new Box();
+var intervalId = 10;
+var paddle = new Pad();
+var redBall = new Ball(100, 100);
+var blueBall = new Ball(200, 200);
+var greenBall = new Ball(200, 300);
+var balls = [new Ball(100, 100, 'red',canvas.width / 2000,canvas.width / 2000),
+new Ball(200, 200, 'blue',canvas.width / 2000,-canvas.width / 2000),
+new Ball(200, 300, 'green',-canvas.width / 2000, -canvas.width / 2000)]
+
+var startGame = function(canvas) {
+    context = canvas.getContext("2d");
+    paddle.drawPad(paddle.paddleProperties.start, paddle.paddleProperties.end, 
+ 		paddle.paddleProperties.width, paddle.paddleProperties.height, 'black');
+
+};
+
+var createHandler = function(){
+	var mouseMoveHandler = function(mouseEvent){
+	    var relativeX = mouseEvent.clientX - canvas.offsetLeft;
+	    if(relativeX > 0 && relativeX < box.WIDTH - paddle.paddleProperties.width) {
+			paddle.paddleProperties.start = relativeX;
+		}
+	}
+	return {
+	    mouseMoveHandler: mouseMoveHandler,
+	  };
+}
+var startGameOnClick = function(event){
+   balls.forEach(drawBall);
+   
+   
+   
+   intervalId = setInterval(draw, intervalId);
+}
+
+var drawBall= function(ball){
+	    ball.drawBall(ball.x, ball.y, ball.radius, ball.color);
+};
+
+var draw = function() {
+    context.clearRect(0, 0, box.WIDTH, box.HEIGHT);
+	
+    paddle.drawPad(paddle.paddleProperties.start, paddle.paddleProperties.end, 
+		paddle.paddleProperties.width, paddle.paddleProperties.height, 'black');
+		
+
+	var drawBall= function(ball){
+		    ball.drawBall(ball.x, ball.y, ball.radius, ball.color);
+	};
+	var hittingWalls = function(ball){
+			ball.hittingTheWalls(ball, box.WIDTH)
+	};
+	var setDisplacement = function(ball){
+			ball.x = ball.x + ball.xDisplacement ;
+			ball.y = ball.y + ball.yDisplacement ;
+	};
+		
+	box.drawCanvasBorderLines();
+	
+	balls.forEach(drawBall);
+	balls.forEach(hittingWalls);
+	balls.forEach(setDisplacement)
+	
+	endGame();
+
+}
+
+var endGame = function(){
+    if(balls.length===0){
+        context.clearRect(0, 0, box.WIDTH, box.HEIGHT);
+	    paddle.drawPad(paddle.paddleProperties.start, paddle.paddleProperties.end, 
+			paddle.paddleProperties.width, paddle.paddleProperties.height, 'black');
+		box.drawCanvasBorderLines();
+        clearTimeout(intervalId);
+    }
+}

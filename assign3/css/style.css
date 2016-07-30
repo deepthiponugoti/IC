@@ -1,0 +1,17 @@
+canvas{
+    background: #eeeeee;
+    display: block;
+    margin: 0 auto;
+}
+
+#gameover {
+    color: red;
+    font-weight: bold;
+    padding-left: 35em;
+}
+
+#time {
+    color: black;
+    font-weight: bold;
+}
+

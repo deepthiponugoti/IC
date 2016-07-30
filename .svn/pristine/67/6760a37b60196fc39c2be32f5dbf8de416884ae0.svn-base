@@ -1,0 +1,27 @@
+[Venkat 07/12/15 05:53 AM CDT]
+review: improve 2
+
+What would possibly be the benefit of using such a context object or
+why bother with this context stuff?
+
+
+------------------------------------------------------------------------------
+[Venkat 07/11/15 05:27 AM CDT]
+review: nice work on 1. Enhance 2 and fix 3.
+
+"In JavaScript" noise words, we are talking about JavaScript, remove.
+
+1.
+"the assignments" you mean "the initializations"?
+
+Good discussion. Nice work.
+
+2.
+Scope/context: Are Scope and context the same?
+What's the purpose of this context object?
+
+3.
+The example is more complex than it should be. Also, there is no use of
+apply in the example.
+
+------------------------------------------------------------------------------

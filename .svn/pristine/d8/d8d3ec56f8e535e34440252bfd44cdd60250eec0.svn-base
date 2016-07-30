@@ -1,0 +1,65 @@
+var context;
+var WIDTH;
+var HEIGHT;
+var intervalId = 0;
+var pad = new Pad();
+var redBall = new Ball();
+var blueBall = new Ball();
+var clearInterval = false;
+var greenBall = new Ball();
+
+var startGame = function(canvas) {
+    context = canvas.getContext("2d");
+    WIDTH = canvas.width;
+    HEIGHT = canvas.height;
+    intervalId = setInterval(draw, 10);
+};
+
+var mouseMoveHandler = function(event){
+    var relativeX = event.clientX - canvas.offsetLeft;
+    if(relativeX > pad.paddlew / 2 && relativeX < canvas.width - pad.paddlew / 2) {
+        pad.paddlex = relativeX - pad.paddlew / 2;
+    }
+}
+
+var hittingTheRightAndLeftWalls = function(ball, WIDTH, center){
+    if (center.x + ball.paddleMove.x > WIDTH - ball.ballRadius || center.x + ball.paddleMove.x < ball.ballRadius)
+        ball.paddleMove.x = -ball.paddleMove.x;
+}
+
+var hittingTheTopAndBottomWalls = function(ball, HEIGHT, center){
+    if (center.y + ball.paddleMove.y > HEIGHT - ball.ballRadius)
+        ball.paddleMove.y = -ball.paddleMove.y;
+    else if (center.y + ball.paddleMove.y < ball.ballRadius) {
+        if (center.x > pad.paddlex && center.x < pad.paddlex + pad.paddlew)
+            ball.paddleMove.y = -ball.paddleMove.y;
+        else {
+            clearInterval = true;
+        }
+    }
+    center.x += redBall.paddleMove.x;
+    center.y += redBall.paddleMove.y;
+}
+
+var draw = function() {
+    context.clearRect(0, 0, WIDTH, HEIGHT);
+    redBall.draw_ball(redBall.redCenter.x, redBall.redCenter.y, redBall.ballRadius, 'red');
+    blueBall.draw_ball(blueBall.blueCenter.x, blueBall.blueCenter.y, blueBall.ballRadius, 'blue');
+    greenBall.draw_ball(greenBall.greenCenter.x, greenBall.greenCenter.y, greenBall.ballRadius, 'green');
+    pad.draw_pad(pad.paddlex, 0, pad.paddlew, pad.paddleh, 'black');
+
+    hittingTheRightAndLeftWalls(redBall, WIDTH, redBall.redCenter);
+    hittingTheTopAndBottomWalls(redBall, HEIGHT, redBall.redCenter);
+
+    hittingTheRightAndLeftWalls(blueBall, WIDTH, blueBall.blueCenter);
+    hittingTheTopAndBottomWalls(blueBall, HEIGHT, blueBall.blueCenter);
+
+    hittingTheRightAndLeftWalls(greenBall, WIDTH, greenBall.greenCenter);
+    hittingTheTopAndBottomWalls(greenBall, HEIGHT, greenBall.greenCenter);
+
+    if(clearInterval === true){
+        context.clearRect(0, 0, WIDTH, HEIGHT);
+        pad.draw_pad(pad.paddlex, 0, pad.paddlew, pad.paddleh, 'black');
+        clearTimeout(intervalId);
+    }
+}

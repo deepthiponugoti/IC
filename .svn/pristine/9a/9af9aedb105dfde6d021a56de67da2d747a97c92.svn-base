@@ -1,0 +1,51 @@
+var context;
+var WIDTH;
+var HEIGHT;
+var intervalId = 0;
+var pad = new Pad();
+var redBall = new Ball();
+var blueBall = new Ball();
+blueBall.center.x = canvas.width - 150;
+blueBall.center.y = canvas.height - 150;
+var greenBall = new Ball();
+
+var startGame = function(canvas) {
+    context = canvas.getContext("2d");
+    WIDTH = canvas.width;
+    HEIGHT = canvas.height;
+    intervalId = setInterval(draw, 10);
+};
+
+var mouseMoveHandler = function(event){
+    var relativeX = event.clientX - canvas.offsetLeft;
+    if(relativeX > pad.paddlew / 2 && relativeX < canvas.width - pad.paddlew / 2) {
+        pad.paddlex = relativeX - pad.paddlew / 2;
+    }
+}
+
+var hittingTheRightAndLeftWalls = function(ball, WIDTH){
+    if (ball.center.x + ball.paddleMove.x > WIDTH - ball.ballRadius || ball.center.x + ball.paddleMove.x < ball.ballRadius)
+        ball.paddleMove.x = -ball.paddleMove.x;
+}
+
+var hittingTheTopAndBottomWalls = function(ball, HEIGHT){
+    if (ball.center.y + ball.paddleMove.y > HEIGHT - ball.ballRadius)
+        ball.paddleMove.y = -ball.paddleMove.y;
+    else if (ball.center.y + ball.paddleMove.y < ball.ballRadius) {
+        if (ball.center.x > pad.paddlex && ball.center.x < pad.paddlex + pad.paddlew)
+            ball.paddleMove.y = -ball.paddleMove.y;
+        else {
+        }
+    }
+    ball.center.x += redBall.paddleMove.x;
+    ball.center.y += redBall.paddleMove.y;
+}
+
+var draw = function() {
+    context.clearRect(0, 0, WIDTH, HEIGHT);
+    redBall.draw_ball(redBall.center.x, redBall.center.y, redBall.ballRadius, 'red');
+    pad.draw_pad(pad.paddlex, 0, pad.paddlew, pad.paddleh, 'black');
+
+    hittingTheRightAndLeftWalls(redBall, WIDTH);
+    hittingTheTopAndBottomWalls(redBall, HEIGHT);
+}

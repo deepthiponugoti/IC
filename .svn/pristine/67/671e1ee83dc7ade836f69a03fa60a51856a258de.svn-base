@@ -1,0 +1,51 @@
+var gameController = function($http, $filter, $document,$timeout) {
+	var controller = this;
+	controller.users = [];
+	controller.currentUser;
+
+	var updateUsers = function(users) {
+		controller.users = users.filter(controller.removeCurrentUser);
+	}
+
+	var getUsers = function() {
+		$http.get('/game/users')
+			.success(updateUsers);
+	}
+
+	var updateCurrentUser = function(currentUser) {
+		controller.currentUser = currentUser;
+	}
+
+	var getCurrentUser = function() {
+		$http.get('/game/currentUser')
+			.success(updateCurrentUser);
+	}
+
+	var removeCurrentUser = function(user) {
+		if (user.username === controller.currentUser.username)
+			return false;
+		return true;
+	}
+
+	controller.getUsers = getUsers;
+	controller.getCurrentUser = getCurrentUser;
+	controller.removeCurrentUser = removeCurrentUser;
+
+	var readyFunction = function() {
+		controller.getCurrentUser();
+		controller.getUsers();
+	}
+	
+	$document.ready(readyFunction);
+	var poll = function() {
+	        $timeout(function() {
+				controller.getUsers();
+	            poll();
+	        }, 1000);
+	    };     
+	   poll();
+
+}
+
+angular.module('battleship', [])
+	.controller('GameController', gameController);

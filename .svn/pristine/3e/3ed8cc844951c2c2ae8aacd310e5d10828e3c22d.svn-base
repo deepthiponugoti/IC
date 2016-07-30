@@ -1,0 +1,66 @@
+var Ball = function(xPos, yPos){
+	this.x = xPos;
+	this.y = yPos;
+	this.radius = canvas.width / 20,
+	this.xDisplacement = canvas.width / 2000,
+	this.yDisplacement = canvas.width / 2000,
+	this.clearBall = false,
+	this.padHitCount = 0 
+}
+
+var getRandomInt = function(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+var canvasCenter = {
+    x: canvas.width / 2,
+    y: canvas.height / 2
+};
+
+Ball.prototype.drawBall = function(x,y,r, color) {
+    context.beginPath();
+    context.arc(x, y, r, 0, Math.PI*2, true);
+    context.fillStyle = color;
+    context.closePath();
+    context.fill();
+}
+
+Ball.prototype.hittingTheRightAndLeftWalls = function(ball, WIDTH, center){
+	if(ball.x + ball.radius > canvas.width
+		|| ball.x - ball.radius < 0){
+		ball.xDisplacement = -ball.xDisplacement;
+	}
+}
+
+Ball.prototype.hittingTheTopAndBottomWalls = function(ball, HEIGHT, center){
+	if(ball.y + ball.radius > canvas.height) {
+		ball.yDisplacement = -ball.yDisplacement;
+	} 
+	else if(ball.y + ball.radius < paddle.paddleProperties.width
+			 && 
+			((ball.x + ball.radius > paddle.paddleProperties.start && 
+				ball.x + ball.radius < paddle.paddleProperties.start + paddle.paddleProperties.width)
+			|| (ball.x - ball.radius > paddle.paddleProperties.start && 
+				ball.x - ball.radius < paddle.paddleProperties.start + paddle.paddleProperties.width))){
+					
+		ball.yDisplacement = -ball.yDisplacement;
+		ball.padHitCount++;
+		ball.xDisplacement = 2 * ball.xDisplacement;
+		ball.yDisplacement = 2 * ball.yDisplacement; 
+		if(ball.padHitCount === 10)
+			ball.radius = ball.radius/4;
+		
+	}
+	else if (ball.y + ball.radius < 0 ){
+		if(ball.clearBall === false){
+			ball.yDisplacement =0;
+			ball.xDisplacement = 0;
+			ball.clearBall = true;
+		}
+	}		
+}
+
+Ball.prototype.hittingTheWalls = function(ball, HEIGHT, center){
+	Ball.prototype.hittingTheRightAndLeftWalls(ball, HEIGHT, center);
+	Ball.prototype.hittingTheTopAndBottomWalls(ball, HEIGHT, center);	
+}
+

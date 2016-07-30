@@ -1,0 +1,17 @@
+var Pad = function(){
+}
+
+Pad.prototype.draw_pad = function(x,y,w,h) {
+    context.beginPath();
+    context.rect(x,y,w,h);
+    context.closePath();
+    context.fill();
+}
+
+Pad.prototype.paddlex = canvas.width / 2;
+Pad.prototype.paddleh = 10;
+Pad.prototype.paddlew = 120;
+Pad.prototype.paddleMove = {
+    x: 2,
+    y: 4
+};

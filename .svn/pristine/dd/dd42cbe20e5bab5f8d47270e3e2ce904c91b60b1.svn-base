@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <p>Refresh the page to restart the game</p>
+  <p>Use left and right arrows of keyboard to move the paddle.</p>
+  <canvas id="mycanvas" width="500" height="500">If you see this message, sorry canvas not supported</canvas>
+  <head>
+      <script>
+          var canvas = document.getElementById('mycanvas');
+      </script>
+      <script src="js/ball.js"></script>
+      <script src="js/pad.js"></script>
+      <script src="js/game.js"></script>
+    <script>
+        var canvas = document.getElementById('mycanvas');
+        startGame(canvas);
+        document.addEventListener('keydown', onKeyDown, false);
+        document.addEventListener('keyup', onKeyUp, false);
+        document.addEventListener('onmousemove', mouseHandler, false);
+    </script>
+
+  </head>
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<p>Refresh the page to restart the game.</p>
+  <p>Use your mouse to move the paddle.</p>
+  <canvas id="mycanvas" width="600" height="500">If you see this message, sorry canvas not supported</canvas>
+	<br/>
+    <label id="time">Hours: Minutes: Seconds</label>
+    <br/>
+	<span id="hours">00</span> : <span id="minutes">00</span> : <span id="seconds">00</span>
+    <span id="gameover"></span>
+  <head>
+      <script>
+          var canvas = document.getElementById('mycanvas');
+      </script>
+      <script src="js/timer.js"></script>
+      <script src="js/ball.js"></script>
+      <script src="js/pad.js"></script>
+      <script src="js/box.js"></script>
+      <script src="js/game.js"></script>
+
+    <script>
+        startGame(canvas);
+		var handlers = createHandler();
+		canvas.addEventListener("mousemove", handlers.mouseMoveHandler);
+		canvas.addEventListener("touchmove", handler.touchHandler);
+		canvas.addEventListener('click', startGameOnClick);
+    </script>
+      <link rel="stylesheet" href="./css/style.css" type="text/css" />
+  </head>
+</html>

@@ -1,0 +1,43 @@
+html(ng-app='playbattleship')
+ head
+  script(src='/javascripts/angular/angular.js')
+  script(src='/javascripts/playgameController.js')
+  link(rel='stylesheet', href='/stylesheets/style.css', type='text/css')
+  body(ng-controller='PlayGameController as controller')
+  h2 Hello {{controller.currentUser.username}}, you are playing with {{controller.playingWith.username}}
+  table(id='table1')
+   tbody()
+    tr(data-ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]")
+     td(data-ng-repeat="j in [1,2,3,4,5,6,7,8,9,10]", id='cell{{i}}{{j}}', ng-class="{ 'placeShip' : checkij === 'placeship', 'shipHit' : checkij === 'shiphit', 'shipMiss' : checkij === 'shipmiss' }", ng-click="checkij = controller.placeORFireShip(i, j)")
+  table
+   tr
+    td
+     div(style="color:#D8E80C;") Placed Ship
+   tr
+    td
+     div(style="color:#37D06A;") Ship hit
+   tr
+    td
+     div(style="color:#F50808;") Ship Miss
+  center#whoseturn(style='color:red;') {{controller.whoseturn}}
+  center(ng-show='controller.gameOver', style='color:red;') {{controller.gameResult}}
+  p
+  table(style='color:green;')
+   tr
+    td Your ship hits/miss
+   tr
+    td Hits: 
+    td {{controller.results.shipsHit}}
+   tr
+    td Miss:
+    td {{controller.results.shipsMiss}}
+  br
+  table(style='color:green;')
+   tr
+    td Opponent hits/miss
+   tr
+    td Hits: 
+    td {{controller.opponentResults.shipsHit}}
+   tr
+    td Miss:
+    td {{controller.opponentResults.shipsMiss}}

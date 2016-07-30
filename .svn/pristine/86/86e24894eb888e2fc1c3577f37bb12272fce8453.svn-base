@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  form(method='post', action='/login')
+    h2 #{title}
+    span Please enter your username: 
+    input(name="username" type="text")
+    input(type="submit")

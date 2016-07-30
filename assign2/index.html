@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+	<header id="navigation">
+		<section>
+			<article>
+				<h3>Book A Ride</h3>
+				<nav id ="othercontent">
+					<ul>
+					  <li><A href="index.html">Taxi Service</A></li>
+					  <li>|</li>
+					  <li><A href="index.html">Contact</A></li>
+					  <li>|</li>
+					  <li><A href="index.html">About</A></li>
+					</ul>			
+				</nav>
+				<form id="bookARide" method="post" action="http://httpbin.org/post" onsubmit="return setListOfSelectedCars(document.getElementById('selectedcars').getElementsByTagName('li'), document.getElementById('carsselected'), document.getElementById('fromlocation'), document.getElementById('selectcarsmessage'));">
+					<fieldset id="bookaride">
+						<label>First Name</label>
+						<input autofocus required type="input" placeholder="Wayne" name="firstname"></input>
+						<br></br>
+						<label>Last Name</label>
+						<input required type="input" placeholder="Rooney" name="lastname"></input>
+						<br></br>
+						<label>Phone</label>
+						<input autofocus required type="tel" placeholder="123-456-7890" name="contactnumber"></input>
+						<br></br>
+						<label>EmailId</label>
+						<input required type="email" placeholder="test@example.com" name="emaild"></input>
+						<br></br>
+						<label>Pick up location:</label>
+						<input type="hidden" name="fromlocation" id="fromlocation" value=""></input>
+						<button id="getmylocation" onclick="getGeoLocation(navigator, document.getElementById('fromlocation'), document.getElementById('tracking'), document.getElementById('getmylocation')); return false;">Get my location</button>
+						<span id="tracking"></span>
+						<br></br>
+						<label>Drop off location:</label>
+						<input required type="input" placeholder="Galleria, Houston" name="destlocation">
+						<br></br>
+						<label>Type of Cars:</label>
+						<ol id="draggablecars" data-draggable="target">
+						  <li data-draggable="item">Economy</li>
+						  <li data-draggable="item">Compact</li>
+						  <li data-draggable="item">Standard</li>
+						  <li data-draggable="item">Premium</li>
+						  <li data-draggable="item">SUV</li>
+						</ol>
+						<br></br>
+						<label>Drag/Drop selected cars from above list:</label>
+						<ol id="selectedcars"  data-draggable="target"></ol>
+                        <span id="selectcarsmessage" style="color:red;font-weight:bold"></span>
+                        <br></br>
+						<input type="hidden" id ="carsselected" name="carsselected" required></input>
+					</fieldset>
+					<input type="submit" value="Search for taxi"></input>
+				</form>
+			</article>
+		</section>
+	</header>
+	<footer id="copyright">
+		<hr></hr>
+		<p>Copyright &copy; 2015. All rights reserved<p>
+	</footer>
+	<link rel="stylesheet" href="css/style.css" type="text/css" />
+	<script src="js/bookaride.js"></script>
+	<script>
+	setDraggableTrueForAllItems(document.querySelectorAll('[data-draggable="item"]'));
+	drapDropAction(document.getElementById('draggablecars'), document.getElementById('selectedcars'));
+	drapDropAction(document.getElementById('selectedcars'), document.getElementById('draggablecars'));
+	</script>
+</html>

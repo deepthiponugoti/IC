@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <p>Slide the bar to start the game</p>
+  <canvas id="mycanvas" width="500" height="400">If you see this message, sorry canvas not supported</canvas>
+  <head>
+    <script src="game.js"></script>
+    <script>          
+      var canvas = document.getElementById('mycanvas');
+      draw(canvas);
+	  
+      //document.addEventListener('mouseup', moveBarMouse);
+      //canvas.addEventListener('touchend', moveBarTouch, false);      
+    </script>
+  </head>
+</html>

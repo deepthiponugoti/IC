@@ -1,0 +1,20 @@
+html(ng-app='playbattleship')
+ head
+  script(src='/javascripts/angular/angular.js')
+  script(src='/javascripts/playgameController.js')
+  link(rel='stylesheet', href='/stylesheets/style.css', type='text/css')
+  body(ng-controller='PlayGameController as controller')
+  h2 Hello {{controller.currentUser.username}}, you are playing with {{controller.playingWith.username}}
+  table(id='table1')
+   tbody()
+    tr(data-ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]")
+     td(data-ng-repeat="j in [1,2,3,4,5,6,7,8,9,10]", id='cell{{i}}{{j}}', ng-class="{ 'placeShip' : checkij === 'placeship', 'shipHit' : checkij === 'shiphit', 'shipMiss' : checkij === 'shipmiss' }", ng-click="checkij = controller.placeORFireShip(i, j)")
+  center#whoseturn(style='color:red;') {{controller.whoseturn}}
+  p
+  center Once the game is finised you will see the results below
+  p
+  center(ng-show='controller.gameOver', style='color:green;') Results: {{controller.gameResult}}
+  p
+  center(ng-show='controller.gameOver', style='color:green;') Number of ships hit: {{controller.results.shipsHit}}
+  p
+  center(ng-show='controller.gameOver', style='color:green;') Number of ships missed: {{controller.results.shipsMiss}}

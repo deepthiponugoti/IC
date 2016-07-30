@@ -1,0 +1,15 @@
+describe('playgameControllerTest', function() {
+	var controller;;
+	beforeEach(module('playbattleship'));
+	
+	beforeEach(inject(function($controller, _$httpBackend_) {
+		controller = $controller('PlayGameController');
+		$httpBackend = _$httpBackend_;
+	}));
+	
+	it('test if updateUserNames sets usernames properly', function() {
+		controller.updateUserNames('?user=Ravi&playingWith=Ravi1');
+		expect(controller.currentUser.username).to.be.eql('Ravi');
+		expect(controller.playingWith.username).to.be.eql('Ravi1');
+	});
+});

@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<p>Refresh the page to restart the game.</p>
+  <p>Use your mouse to move the paddle.</p>
+  <canvas id="mycanvas" width="500" height="500">If you see this message, sorry canvas not supported</canvas>
+  <head>
+      <script>
+          var canvas = document.getElementById('mycanvas');
+      </script>
+      <script src="js/ball.js"></script>
+      <script src="js/pad.js"></script>
+      <script src="js/game.js"></script>
+    <script>
+        startGame(canvas);
+        document.addEventListener('mousemove', mouseMoveHandler, false);
+    </script>
+
+  </head>
+</html>

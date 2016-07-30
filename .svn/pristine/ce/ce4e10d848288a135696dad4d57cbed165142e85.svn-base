@@ -1,0 +1,29 @@
+[Venkat 08/04/15 04:59 AM MDT]
+review: Fix collision issues
+
+All the ball seem to start in the same direction instead of random
+directions.
+
+Hit test has bugs, the ball ran out even when pad was on its way (at a
+greater speed that is).
+
+When balls collide they have to bound off of each other.
+
+------------------------------------------------------------------------------
+[Venkat 08/02/15 05:41 AM CDT]
+review: A few things to fix
+
+When the pad hits the border it shrinks.
+Show the border of the box.
+The ball should escape and disappear if not blocked.
+
+------------------------------------------------------------------------------
+[Venkat 08/01/15 04:24 AM CDT]
+review: good start
+
+No need for keyboard events, instead use mouse and touch events.
+
+See email to the mailing list where I recommended creating good abstractions
+and instead of scattered variables. Accidental complexity will go through the roof if we keep many variables and functions, all in the file scope.
+
+------------------------------------------------------------------------------

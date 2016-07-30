@@ -1,0 +1,34 @@
+var canvasHeight = 400;
+var ballsOrigin = 385;
+var barOrigin = 0;
+
+var canvas;
+var bar = 100;
+
+var drawBar = function(context, center) {
+    context.fillStyle = 'black';
+    context.fillRect(center.x - 50, canvas.height - 15, bar, bar); 
+}
+
+var drawField = function(){
+	var center = {x: canvas.width/2, y: canvas.height/2};
+	
+    var context = canvas.getContext('2d');
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = 'yellow';
+    context.fillRect(0, 0, canvas.width, canvas.height);  
+  
+    context.beginPath();
+	
+	drawBar(context, center);
+}
+
+var draw = function(theCanvas) {
+  canvas = theCanvas;
+  drawField();
+}
+
+var moveBar = function() {
+  
+}

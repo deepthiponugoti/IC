@@ -1,0 +1,153 @@
+var playGameController = function($http, $document, $location, $timeout) {
+	var controller = this;
+	controller.currentUser = {shipsAt:[]};
+	controller.playingWith = {shipsAt:[]};
+	controller.results = {shipsHit:0, shipsMiss:0};
+	controller.opponentResults = {shipsHit:0, shipsMiss:0};
+	controller.gameResult = '';
+	controller.gamestarted = false;
+	controller.gameOver = false;
+	controller.sendDetails = true;
+	controller.whoseturn = "The game will start once both the users places their battle ships"
+	controller.myturn = false;
+	controller.cellStyles = {};
+	var updateUserNames = function(urlParams) {
+		var split = urlParams.split('&');
+		if(split.length === 2){
+			controller.currentUser.username = split[0].split('=')[1]
+			controller.playingWith.username = split[1].split('=')[1]
+		}
+	}
+	
+	var placeYourShip = function(i, j) {
+		var shipat = i + '_' + j;
+		if(controller.currentUser.shipsAt.indexOf(shipat) >= 0){
+			controller.cellStyles[shipat] = 'placeship'
+			return 'placeship';
+		}else if(controller.currentUser.shipsAt.length === 5){
+			return '';
+		}else{
+			controller.cellStyles[shipat] = 'placeship'
+			controller.currentUser.shipsAt.push(i + '_' + j);
+			return 'placeship';
+		}
+	}
+	
+	var fireTheShip = function(i, j) {
+		var clickedAt = i + '_' + j;
+		if(controller.playingWith.shipsAt.indexOf(clickedAt) >= 0){
+			controller.results.shipsHit += 1;
+			if(controller.results.shipsHit === 5){
+				controller.gameResult = 'YOU WON';
+				controller.gameOver = true;
+				updateWhoseTurn();
+				pollChangeTurn(true);
+			}
+			controller.cellStyles[clickedAt] = 'shiphit'
+			return 'shiphit';
+		}else{
+			controller.results.shipsMiss += 1;
+			controller.cellStyles[clickedAt] = 'shipmiss'
+			return 'shipmiss';
+		}	
+	}
+	
+	var placeORFireShip = function(i, j) {
+		var clickedAt = i + '_' + j; 
+		if(!controller.gamestarted){
+			return placeYourShip(i, j);
+		}else if(controller.gamestarted && controller.myturn && !controller.gameOver && (controller.cellStyles[clickedAt]!='shiphit' && controller.cellStyles[clickedAt] != 'shipmiss')){
+			var action = fireTheShip(i, j);
+			changeTurn(controller.myturn);
+			controller.myturn = false;
+			updateWhoseTurn();
+			return action;
+		}else{
+			if(typeof controller.cellStyles[clickedAt] === 'undefined'){
+				return '';
+			}else{
+				return controller.cellStyles[clickedAt]; 
+			}
+		}
+	}
+	
+	var updateWhoseTurn = function() {
+		if(controller.myturn && !controller.gameOver){
+			controller.whoseturn = "Your turn to play, hit the block and try to sink a ship";
+		}else if(!controller.gameOver){
+			controller.whoseturn = "Opponents turn, please wait for your turn";
+		}else{
+			controller.whoseturn = "GAME OVER";
+		}
+	}
+	
+	var detailsReceived = function(data) {
+		if(typeof data.user != 'undefined'){
+			controller.playingWith = data.user;
+			controller.gamestarted = true;
+		}
+		controller.myturn = data.turn;
+		updateWhoseTurn();
+	}
+	
+	var sendDetailsToOtherUser = function() {
+		if(controller.currentUser.shipsAt.length === 5 && controller.playingWith.shipsAt.length != 5){
+			$http.post('/gameplay/senddetails', {details:{user: controller.currentUser, playingWith: controller.playingWith, turn:false}}).success(detailsReceived);
+		}
+	}
+	
+	
+	var changeTurn = function(turn) {
+		$http.post('/gameplay/changeTurn', {details:{user: controller.currentUser, playingWith: controller.playingWith, turn:turn, gameOver:controller.gameOver, results:controller.results}});
+	}
+	
+	var updateTurn = function(data) {
+		if(typeof data != 'undefined' && !controller.gameOver){
+			controller.myturn = data.turn;
+			controller.gameOver = data.gameOver;	
+			controller.opponentResults = data.results;
+			if(controller.gameOver){
+				controller.whoseturn = "GAME OVER";
+				controller.gameResult = 'YOU LOST';
+			}else{
+				updateWhoseTurn();
+			}
+		}
+	}
+	
+	var pollChangeTurn = function(gameOver) {
+		if(!controller.myturn && controller.gamestarted && !controller.gameOver){
+			$http.post('/gameplay/getTurn', {details:{user: controller.currentUser, playingWith: controller.playingWith, gameOver:controller.gameOver}}).success(updateTurn);	
+		}else if(gameOver){
+			$http.post('/gameplay/getTurn', {details:{user: controller.currentUser, playingWith: controller.playingWith, gameOver:true}}).success(updateTurn);
+		}
+	}
+    
+    var taskToRun = function() {
+		controller.sendDetailsToOtherUser();
+		controller.pollChangeTurn();
+        controller.poll();
+    }
+	
+	var poll = function() {
+		$timeout(controller.taskToRun, 1000, false);
+	}
+	
+	controller.pollChangeTurn = pollChangeTurn;
+	controller.updateWhoseTurn = updateWhoseTurn;
+	controller.updateTurn = updateTurn;
+	controller.changeTurn = changeTurn;
+	controller.placeORFireShip = placeORFireShip;
+	controller.detailsReceived = detailsReceived;
+	controller.sendDetailsToOtherUser = sendDetailsToOtherUser;
+	controller.placeYourShip = placeYourShip;
+	controller.fireTheShip = fireTheShip;
+	controller.updateUserNames = updateUserNames;
+	controller.updateUserNames(location.search.substring(1));
+	controller.taskToRun = taskToRun;
+	controller.poll = poll;
+    controller.poll();   
+}
+
+angular.module('playbattleship', [])
+	.controller('PlayGameController', playGameController);

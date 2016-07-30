@@ -1,0 +1,14 @@
+html(ng-app='playbattleship')
+ head
+  script(src='/javascripts/angular/angular.js')
+  script(src='/javascripts/playgameController.js')
+  link(rel='stylesheet', href='/stylesheets/style.css', type='text/css')
+  body(ng-controller='PlayGameController as controller')
+  h2 Hello {{controller.currentUser.username}}, you are playing with {{controller.playingWith.username}}
+  - for (var k = 1; k <= 2; k++)
+   table(id='table'+ k)
+    tbody
+     - for (var i = 1; i <= 10; i++)
+      tr
+       - for (var j = 1; j <= 10; j++)
+        td

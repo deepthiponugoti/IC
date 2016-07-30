@@ -1,0 +1,229 @@
+describe('playgameControllerTest', function() {
+	var controller;
+	beforeEach(module('playbattleship'));
+	
+	beforeEach(inject(function($controller, _$httpBackend_) {
+		controller = $controller('PlayGameController');
+		$httpBackend = _$httpBackend_;
+	}));
+	
+	it('test if updateUserNames sets usernames properly', function() {
+		controller.updateUserNames('?user=Ravi&playingWith=Ravi1');
+		expect(controller.currentUser.username).to.be.eql('Ravi');
+		expect(controller.playingWith.username).to.be.eql('Ravi1');
+	});
+	
+	it('test placeYourShip should push the ship position into array and return placeship', function() {
+		var flag = controller.placeYourShip(1, 1);
+		expect(controller.currentUser).to.be.eql({shipsAt: [ '1_1' ]});
+		expect(flag).to.be.eql('placeship');
+	});
+	
+	it('test placeYourShip should not push the ship and return empty string if ship count is already 5', function() {
+		controller.currentUser = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		var flag = controller.placeYourShip(1, 9);
+		expect(controller.currentUser).to.be.eql(controller.currentUser);
+		expect(flag).to.be.eql('');
+	});
+	
+	it('test placeYourShip should not push the ship and return placeship if ship already present', function() {
+		controller.currentUser = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		var flag = controller.placeYourShip(1, 1);
+		expect(controller.currentUser).to.be.eql(controller.currentUser);
+		expect(flag).to.be.eql('placeship');
+	});
+	
+	it('test fireTheShip: if ship is present returns shiphit, increment hit count', function() {
+		controller.playingWith = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		controller.results = {shipsHit:1};
+		var flag = controller.fireTheShip(1, 1);
+		expect(flag).to.be.eql('shiphit');
+		expect(controller.results.shipsHit).to.be.eql(2);
+	});
+	
+	it('test fireTheShip: if shipsHit is 4 returns shiphit, increment hit count, and update game result', function() {
+		controller.playingWith = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		controller.results = {shipsHit:4};
+		var flag = controller.fireTheShip(1, 1);
+		expect(flag).to.be.eql('shiphit');
+		expect(controller.gameResult).to.be.eql('YOU WON');
+		expect(controller.gameOver).to.be.eql(true);
+		expect(controller.results.shipsHit).to.be.eql(5);
+	});
+	
+	it('test fireTheShip: if ship is not present update miss count and return shipmiss', function() {
+		controller.playingWith = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		controller.results = {shipsMiss:4};
+		var flag = controller.fireTheShip(4, 1);
+		expect(flag).to.be.eql('shipmiss');
+		expect(controller.results.shipsMiss).to.be.eql(5);
+	});
+	
+	it('test placeORFireShip: if game is not started should place the ship', function() {
+		var flag = controller.placeORFireShip(1, 1);
+		expect(controller.currentUser).to.be.eql({shipsAt: [ '1_1' ]});
+		expect(flag).to.be.eql('placeship');
+	});
+	
+	it('test placeORFireShip: if game is started and it is my turn and game is not over, then fire the ship', function() {
+		controller.playingWith = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		controller.results = {shipsHit:1};
+		controller.gamestarted = true;
+		controller.myturn = true;
+		controller.gameOver = false;
+		var flag = controller.placeORFireShip(1, 1);
+		expect(flag).to.be.eql('shiphit');
+		expect(controller.results.shipsHit).to.be.eql(2);
+	});
+	
+	it('test placeORFireShip: dont hit the ship if it is already hit', function() {
+		controller.cellStyles = {"1_1":'shiphit'}
+		controller.playingWith = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		controller.gamestarted = true;
+		controller.results = {shipsHit:1};
+		controller.myturn = true;
+		controller.gameOver = false;
+		var flag = controller.placeORFireShip(1, 1);
+		expect(flag).to.be.eql('shiphit');
+		expect(controller.results.shipsHit).to.be.eql(1); 
+	});
+	
+	it('test placeORFireShip: dont hit the ship if it is already a miss', function() {
+		controller.cellStyles = {"1_1":'shipmiss'}
+		controller.playingWith = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		controller.gamestarted = true;
+		controller.results = {shipsHit:1};
+		controller.myturn = true;
+		controller.gameOver = false;
+		var flag = controller.placeORFireShip(1, 1);
+		expect(flag).to.be.eql('shipmiss');
+		expect(controller.results.shipsHit).to.be.eql(1); 
+	});
+	
+	it('test placeORFireShip: if game is started and it is not my return and cell is not yet touched empty string', function() {
+		controller.gamestarted = true;
+		controller.myturn = false;
+		var flag = controller.placeORFireShip(1, 1);
+		expect(flag).to.be.eql(''); 
+	});
+	
+	it('test placeORFireShip: if game is started and it is not my return and cell already has something, return the samething', function() {
+		controller.gamestarted = true;
+		controller.myturn = false;
+		controller.cellStyles = {"1_1":'placeship'}
+		var flag = controller.placeORFireShip(1, 1);
+		expect(flag).to.be.eql('placeship');
+	});
+	
+	it('test detailsReceived, set playngWith and updates opponent turn message', function() {
+		controller.detailsReceived({user:{shipsAt:['1_1']}, turn:false});
+		expect(controller.playingWith).to.be.eql({shipsAt: ['1_1']});
+		expect(controller.whoseturn).to.be.eql("Opponents turn, please wait for your turn");
+	});
+	
+	it('test detailsReceived, set playngWith and gamestarted and updates your turn message', function() {
+		controller.detailsReceived({user:{shipsAt:['1_1']}, turn:true});
+		expect(controller.playingWith).to.be.eql({shipsAt: ['1_1']});
+		expect(controller.whoseturn).to.be.eql("Your turn to play, hit the block and try to sink a ship");
+		expect(controller.gamestarted).to.be.eql(true);
+	});
+	
+	it('test detailsReceived, should not set gamestarted and updates whose turn appropriately', function() {
+		controller.detailsReceived({user:undefined});
+		expect(controller.gamestarted).to.be.eql(false);
+		expect(controller.whoseturn).to.be.eql("Opponents turn, please wait for your turn");
+	});
+	
+	it('test sendDetailsToOtherUser, which is a service call, sends data and recevies data.', function() {
+		controller.currentUser = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		controller.playingWith = {shipsAt: []};
+		
+		$httpBackend.expectPOST('/gameplay/senddetails' , {details:{user: controller.currentUser, playingWith: controller.playingWith, turn:false}})
+			.respond(200, {user:{shipsAt:['1_1']}, turn:true});
+		controller.sendDetailsToOtherUser();
+		$httpBackend.flush();
+		
+		expect(controller.playingWith).to.be.eql({shipsAt: ['1_1']});
+	});
+	
+	it('changeTurn should post message to the services', function() {
+		$httpBackend.expectPOST('/gameplay/changeTurn' , {details:{user: controller.currentUser, playingWith: controller.playingWith, turn:true, gameOver:controller.gameOver, results:{"shipsHit":0,"shipsMiss":0}}})
+			.respond(200, {results:{"shipsHit":1,"shipsMiss":1}});
+		controller.changeTurn(true);
+		$httpBackend.flush();
+		expect(true).to.be.eql(true);
+	});
+	
+	it('test updateTurn: if data is undefined do noting', function() {
+		controller.updateTurn(undefined);
+		expect(true).to.be.eql(true);
+	});
+	
+	it('test updateTurn: if data is not undefined, and game is over set the fileds accordingly', function() {
+		controller.updateTurn({turn:true, gameOver:true});
+		expect(controller.myturn).to.be.eql(true);
+		expect(controller.gameOver).to.be.eql(true);
+		expect(controller.whoseturn).to.be.eql("GAME OVER");
+		expect(controller.gameResult).to.be.eql("YOU LOST"); 
+	});
+	
+	it('test updateTurn: if data is not undefined, and game is not over updateWhoseTurn', function() {
+		controller.updateTurn({turn:true, gameOver:false, results:{}});
+		expect(controller.myturn).to.be.eql(true);
+		expect(controller.whoseturn).to.be.eql("Your turn to play, hit the block and try to sink a ship");
+	});
+	
+	it('test pollChangeTurn: if data is not undefined, and game is not over updateWhoseTurn', function() {
+		controller.myturn = false;
+		controller.gamestarted = true;
+		controller.gameOver = false;
+		controller.currentUser = {shipsAt: [ '1_2', '1_1', '1_3', '1_4', '1_5' ]};
+		controller.playingWith = {shipsAt: []};
+		
+		$httpBackend.expectPOST('/gameplay/getTurn' , {details:{user: controller.currentUser, playingWith: controller.playingWith, gameOver:controller.gameOver}})
+			.respond(200, {turn:true, gameOver:false, results:{}});
+		controller.pollChangeTurn();
+		$httpBackend.flush();
+		
+		expect(controller.myturn).to.be.eql(true);
+		expect(controller.whoseturn).to.be.eql("Your turn to play, hit the block and try to sink a ship");
+	});
+	
+	it('test pollChangeTurn: if data is not undefined, and game is over but we still want to send one last request', function() {
+		controller.gameOver = true;
+		controller.currentUser = {shipsAt: []};
+		controller.playingWith = {shipsAt: []};
+		
+		$httpBackend.expectPOST('/gameplay/getTurn' , {details:{user: controller.currentUser, playingWith: controller.playingWith, gameOver:controller.gameOver}})
+			.respond(200, {turn:true, gameOver:true, results:{}}); 
+		controller.pollChangeTurn(true);
+		$httpBackend.flush();
+		
+		expect(true).to.be.eql(true);
+	});
+	
+});
+
+describe('PollTest', function() {
+    var controller;
+    var $timeout;
+
+    beforeEach(module('playbattleship'));
+
+    beforeEach(inject(function($controller, _$timeout_) {
+        controller = $controller('PlayGameController');
+        $timeout = _$timeout_;
+    }));
+
+    it('test poll calls the given function', function() {
+        var called = false;
+
+        controller.taskToRun = function() {
+            called = true;
+        }
+
+        controller.poll();
+        $timeout.flush();
+        expect(called).to.be.eql(true);
+    });
+});

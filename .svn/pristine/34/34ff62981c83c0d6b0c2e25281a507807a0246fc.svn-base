@@ -1,0 +1,127 @@
+HW 3. Due 11:59PM July 24th
+
+Mention a few JavaScript engines available today. Discuss their key strengths and limitations.
+
+A JavaScript engine is a program that interprets and executes the source code. 
+
+There are many JavaScript engines available today. The following are some of the active projects:
+
+V8: It is an open source JavaScript engine developed by Google for the Google Chrome browser.
+
+The following are the strengths of V8 performance:
+
+1) To reduce the time required to access a property of an object, V8 creates hidden classes dynamically. Hidden classes store the properties of an object. They eliminate the need to dynamically look up the object data structure (dictionary in general for other engines) which internally reduces the time to access the property of an object.
+
+2) Inline caching is used when accessing the property of an object.
+
+3) V8 compiles the JavaScript code into machine instructions directly. There is no interpreter. 
+
+4) If the same type of object is accessed or created then the combination of hidden classes with inline caching and machine code generation increases the performance to a great extent.
+
+5) It's efficient garbage collection ensures that there are no memory leaks.
+
+Limitations:
+
+1) If your application is not dependent on the execution speed of JavaScript, then using V8 will make no difference.
+
+2) As the code is generated to machine instructions directly, there may be situations where the engine compiles the code which is never used or is used rarely. This will lead to high memory usage.
+
+
+SpiderMonkey: It is the code name for the first-ever JavaScript engine maintained by mozilla foundation. 
+
+Strengths: 
+
+1) This engine can be linked into any C++ program, not just a browser. This helps many applications to execute JavaScript code from C++ programs.
+
+2) JS:Value is a data type provided by the API of this engine which accepts all the data types. This helps statically typed languages like C/C++ to interact with dynamically typed JavaScript.
+
+3) Efficient use of garbage collector and ensuring that the variables required are GC-reachable may also add as a strength.
+
+Limitations:
+
+1) SpiderMonkey converts the source code into an intermediate language which is then interpreted. The interpreter monitors the program paths that are executed more often. After certain threshold, this is translated to machine code called trace. This tracing will not work efficiently if there are multiple branches. There is some overhead involved in monitoring execution before deciding to compile and execute the trace.
+
+2) JavaScript is weakly typed language. Because of this the tracer makes assumptions about the type of objects. So if the assumption is failed, then the cost of failing the trace and coming back to the interpreter code is very high.
+
+3) Overly frequent garbage collection can become a performance issue. 
+
+4) JS:Value is not automatically initialized to a safe value. It may become a dangling pointer leading to complete crash of the C++ program.
+
+
+Chakra: It is developed by Microsoft for Internet Explorer browser.
+
+Strengths:
+
+1) Whenever this engine finds that it is running on a potentially underutilized hardware, it spawns the processes and runs on multiple concurrent background threads for compilation. It takes advantage of all the available hardware.
+
+2) This engine first interprets the code using interpreter (slows down the performance) and later compiles the code to machine code. In Windows 10 to increase the performance, a second JIT compiler called Simple JIT was used. This compiler reduces the overhead of generating machine code for complex optimizations.
+
+3) The time taken to compile the code using Simple JIT is very less.
+
+4) It delays the work as much as possible until it is needed by using the concept of deferred parsing and supports parallelism of tasks.
+
+Limitations:
+
+1) We cannot access Chakra in WinJs apps from WinRT components.
+
+2) Cannot use XAML types.
+
+
+Rhino: It is an open source software written entirely in Java and is maintained by mozilla foundation.
+
+Strengths:
+
+1) It is intended to be used in server-side applications. So, we can use Rhino in an enterprise application for adhoc requests on a daily basis.
+
+2) It translates the JavaScript code into Java classes which helps the interation easier with other java classes within the application.
+
+3) It supports great amount of scalability because it supports multi-threading.
+
+4) Rhino works anywhere where the JVM works.
+
+Limitations:
+
+1) Rhino works in both compiled as well as interpreted mode. For simple programs, the extra time spent in compiling the program may overshadow the time running it. If it is a long running benchmark with more complex code then the performance may be good.
+
+2) Performance of Rhino is less when compared with V8.
+
+
+Jurassic: It provides the implementation of JavaScript for .NET applications.
+
+Strengths:
+
+1) Simple yet powerful API.
+
+2) It provides basic support for integrated debugging within visual studio.
+
+3) It uses light-weight code generation resulting in efficient use of garbage collector.
+
+Limitations:
+
+1) It does not directly support interrupting the script execution. This may hang the engine sometimes.
+
+2) Interrupting the execution of a script is only possible if the engine is been executed in separate thread.
+
+
+
+Nashorn: It is developed in Java by Oracle released with Java 8.
+
+Strengths:
+
+1) Implements a light-weight high performance JavaScript runtime in Java with native JVM.
+
+2) We can use JavaScript for shell scripting.
+
+3) We can interact with the Java classes and methods using this engine.
+
+4) This engine helps to run the JavaScript code as native desktop code.
+
+5) It is the successor of Rhino.
+
+Limitations:
+
+1) Nashorn represents script objects created by script as instances of jdk.nashorn.internal.runtime.ScriptObject. "jdk.nashorn.api.scripting.ScriptObjectMirror" class is the API entry point for nashorn script objects. While nashorn attempts to give a seamless illusion of ScriptObjectMirrors and JSObjects, not every operation and script API (JSON, Array, Function's properties/functions) treats ScriptObjectMirror and jdk.nashorn.internal.runtime.ScriptObject uniformly.
+
+2) There are places where ScriptObjects work as expected but if you pass ScriptObjectMirror or your own JSObject implementation, it won't work as expected.
+
+Total[10]: 10

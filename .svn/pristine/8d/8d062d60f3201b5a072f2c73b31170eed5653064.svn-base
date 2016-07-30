@@ -1,0 +1,26 @@
+var express = require('express');
+var router = express.Router();
+
+var users = [];
+var currentUser;
+
+router.post('/', function(req, res, next) {
+	var user = {username: req.body.username, waitingFlag: true };
+	
+	users.push(user);
+	currentUser = user;
+	
+	res.render('game');
+	res.end();
+});
+
+
+router.get('/users', function(req, res, next) {
+	res.send(users);
+});
+  
+router.get('/currentUser', function(req, res, next) {
+	res.send(currentUser);
+});
+
+module.exports = router;

@@ -1,0 +1,15 @@
+<html>
+	<head> 
+		<link rel="stylesheet" href="/stylesheets/style.css" type="text/css" />
+	</head>
+	<body>
+		<form method="post" action="/game">
+			<fieldset id="heading">
+				<h3>Welcome to game of battleship</h3>
+		  	  <h2></h2><span>Please enter your username: </span>
+			  <input name="username" type="text"/>
+			  <input type="submit"/>
+	  		</fieldset>
+		</form>
+	</body>
+</html>

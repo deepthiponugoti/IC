@@ -1,0 +1,10 @@
+CACHE MANIFEST
+# rev 104
+
+CACHE:
+/js/functions.js
+/index.html
+/css/style.css
+
+NETWORK:
+*

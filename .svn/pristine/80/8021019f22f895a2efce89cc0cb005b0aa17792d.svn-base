@@ -1,0 +1,30 @@
+[Venkat 08/06/15 06:34 AM CDT]
+review: excellent progress
+
+Nice job with connected session. Nice feedback on submit order. Good job.
+
+Once submit is clicked, the data field is lost, set it back to 
+current date as default.
+
+After a second or two, remove the feedback message. If it remain there,
+and the user performs next action, now we are not sure if it worked or not.
+
+contentType: May be this can be turned into a map lookup instead of 
+if/else.
+
+------------------------------------------------------------------------------
+[Venkat 08/05/15 05:48 AM CDT]
+review: good start
+
+Fill the date of creation with the current date as default.
+
+When button is submitted, give a clue to the user what happened,
+saved locally or sent to the server.
+
+Embrace test driven development, at least make an effort.
+
+Give a better name than functions.js for this file.
+
+Change app.js to server.js to easily identify this is the server to use.
+
+------------------------------------------------------------------------------

@@ -1,0 +1,127 @@
+describe('gameControllerTest', function() {
+
+	var controller;
+
+	var sampleusers = [{
+		username: 'Jade',
+		waitingFlag: true
+	}, {
+		username: 'HTML',
+		waitingFlag: true
+	}, {
+		username: 'Angular',
+		waitingFlag: true
+	}];
+
+	var expectedUsersListToShow = [{
+		username: 'HTML',
+		waitingFlag: true
+	}, {
+		username: 'Angular',
+		waitingFlag: true
+	}];
+
+	var samplecurrent = {
+		username: 'Jade',
+		waitingFlag: true
+	};
+
+	beforeEach(module('battleship'));
+
+	beforeEach(inject(function($controller, _$httpBackend_) {
+		controller = $controller('GameController');
+		$httpBackend = _$httpBackend_;
+	}));
+
+	it('canary should pass', function() {
+		expect(true).to.be.eql(true);
+	});
+
+	it('controller should have an empty users list on create', function() {
+		expect(controller.users).to.be.eql([]);
+	});
+
+	it('test remove curretn user if user and current user are same', function() {
+		controller.currentUser = samplecurrent;
+		expect(controller.removeCurrentUser(samplecurrent)).to.be.eql(false);
+	});
+
+	it('test remove curretn user if user and current user are different', function() {
+		controller.currentUser = {};
+		expect(controller.removeCurrentUser(samplecurrent)).to.be.eql(true);
+	});
+
+	it('getUsers should get users from the server', function() {
+		$httpBackend.expectGET('/game/users')
+			.respond(200, sampleusers);
+		controller.currentUser = samplecurrent;
+		controller.getUsers();
+
+		$httpBackend.flush();
+
+		expect(controller.users).to.be.eql(expectedUsersListToShow);
+	});
+
+	it('getCurrentUser should get currentUser from the server', function() {
+		$httpBackend.expectGET('/game/currentUser')
+			.respond(200, samplecurrent);
+		controller.getCurrentUser();
+
+		$httpBackend.flush();
+
+		expect(controller.currentUser).to.be.eql(samplecurrent);
+	});
+	
+	it('inviteUser should post data to server', function() {
+		$httpBackend.expectPOST('/game/inviteUser')
+			.respond(200, {});
+		
+		controller.inviteUser();
+
+		$httpBackend.flush();
+
+		expect(true).to.be.eql(true);
+	});
+	
+	it('updateCurrentUserFromServer should get data from the server and update curretn user', function() {
+		$httpBackend.expectPOST('/game/updateCurrentUser')
+			.respond(200, samplecurrent);
+		
+		controller.updateCurrentUserFromServer();
+
+		$httpBackend.flush();
+
+		expect(controller.currentUser).to.be.eql(samplecurrent);
+	});
+	
+	it('test condtionToInvite for true case', function() {
+		samplecurrent.invitedBy = samplecurrent;
+		controller.currentUser = samplecurrent;
+		expect(controller.condtionToInvite(samplecurrent)).to.be.eql(true);
+	});
+	
+	it('test condtionToInvite for false case', function() {
+		samplecurrent.invitedBy = {};
+		controller.currentUser = samplecurrent;
+		expect(controller.condtionToInvite(samplecurrent)).to.be.eql(false);
+	});
+
+});
+
+describe('gameControllerDocumentInteractionTest', function() {
+	var funkPassed;
+	beforeEach(module('battleship'));
+
+	beforeEach(inject(function($controller, $document) {
+		$document.ready = function(funk) {
+			funkPassed = funk;
+		}
+
+		controller = $controller('GameController');
+	}));
+
+	it('document ready should receive function', function() {
+		expect(funkPassed).be.
+		function;
+	});
+});

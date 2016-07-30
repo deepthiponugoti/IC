@@ -1,0 +1,14 @@
+var Pad = function(){
+}
+
+Pad.prototype.draw_pad = function(x,y,w,h, color) {
+    context.beginPath();
+    context.rect(x,y,w,h);
+    context.fillStyle = color;
+    context.closePath();
+    context.fill();
+}
+
+Pad.prototype.paddlex = canvas.width / 2;
+Pad.prototype.paddleh = 10;
+Pad.prototype.paddlew = 120;

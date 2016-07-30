@@ -1,0 +1,49 @@
+var invokeIfConnected = function(callback) {
+	var xhr = new XMLHttpRequest();
+	var handler = function() {
+		alert("am here 1");
+		if(xhr.readyState === 4) {
+			if(xhr.status === 200){
+				alert(" am here 2");
+				callback();
+			}	
+		}
+	}
+	xhr.onreadystatechange = handler;
+	alert("/?q=" + Math.random());
+	xhr.open("GET", "/?q=" + Math.random());
+	xhr.send();
+}
+
+var storeLocally = function() {
+	var workOrderCount = parseInt(localStorage.workOrderCount) + 1 || 0;
+	localStorage['workOrder' + workOrderCount] = $('#workorderform').serialize();
+	localStorage.workOrderCount = workOrderCount;
+}
+
+var sendToServer = function() {
+	for(var i=0; i <= localStorage.workOrderCount ; i++){
+		var data = localStorage['workOrder' + i];
+		submitFromData(data);
+	}
+	localStorage.clear();
+}
+
+var submitData = function() {
+	$('#workorderform').submit(function() {
+		storeLocally();
+		invokeIfConnected(sendToServer);
+		setTimeout(function () { window.location.reload(); }, 10);
+		return false;
+	});
+}
+
+var submitFromData = function(data) {
+	$.ajax({
+		url: '/workorder',
+	   	data: data,
+	    dataType:'json',
+	    type:'POST',
+		asyn:false
+	});
+}

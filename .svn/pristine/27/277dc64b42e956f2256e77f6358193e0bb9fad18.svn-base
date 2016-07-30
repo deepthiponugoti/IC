@@ -1,0 +1,19 @@
+var playGameController = function($http, $document, $location) {
+	var controller = this;
+	controller.currentUser = {};
+	controller.playingWith = {};
+	
+	var updateUserNames = function(urlParams) {
+		var split = urlParams.split('&');
+		if(split.length === 2){
+			controller.currentUser.username = split[0].split('=')[1]
+			controller.playingWith.username = split[1].split('=')[1]
+		}
+	}
+	
+	controller.updateUserNames = updateUserNames;
+	controller.updateUserNames(location.search.substring(1));
+}
+
+angular.module('playbattleship', [])
+	.controller('PlayGameController', playGameController);

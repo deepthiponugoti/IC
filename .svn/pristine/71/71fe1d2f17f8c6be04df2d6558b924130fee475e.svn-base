@@ -1,0 +1,50 @@
+[Venkat 07/29/15 11:36 AM CDT]
+review: red in coverage
+
+Notice red in coverage report.
+
+Avoid alerts, they annoy the users.
+May be some of the code can be reduced, for example, fewer loops?
+
+------------------------------------------------------------------------------
+[Venkat 07/28/15 10:47 AM CDT]
+review: good work
+
+Nice work on location button feedback.
+
+Feature complete. I did not review JavaScript since there were no tests.
+
+------------------------------------------------------------------------------
+[Venkat 07/27/15 08:50 AM MDT]
+review: fix browser incompatibility issue
+
+Avoid using textfield for goelocation since that's editable on Chrome on OS X.
+
+Minimize JavaScript spread in the html file.
+
+------------------------------------------------------------------------------
+[Venkat 07/26/15 20:52 PM MDT]
+review: give feedback to user
+
+When user clicks on get location button give a cue that the app is working on it.
+
+Make the button name GetLocation easy to read for human eyes.
+
+In chrome, able to edit the location textfield. Make it non-editable.
+
+
+------------------------------------------------------------------------------
+[Venkat 07/25/15 06:19 AM MDT]
+review: A few things to fix
+
+Allow Get Location to be clicked without error that fields don't have a value.
+
+Provide email field.
+
+------------------------------------------------------------------------------
+[Venkat 07/24/15 07:34 AM MDT]
+review: Good start
+
+Make the location textbox non-editable.
+
+------------------------------------------------------------------------------

@@ -1,0 +1,35 @@
+var Pad = function(){
+}
+
+Pad.prototype.draw_pad = function(x,y,w,h, color) {
+    context.beginPath();
+    context.rect(x,y,w,h);
+    context.fillStyle = color;
+    context.closePath();
+    context.fill();
+}
+
+Pad.prototype.paddlex = canvas.width / 2;
+Pad.prototype.paddleh = 10;
+Pad.prototype.paddlew = canvas.width / 10;
+
+Pad.prototype.checkForThePadHits = function(balls){
+    if(balls[0].redMove.hits === 10) {
+        if(Math.floor(balls[0].ballRadius / 2) !== 0){
+            balls[0].ballRadius = balls[0].ballRadius / 2;
+        }
+        balls[0].redMove.hits = 0;
+    }
+    if(balls[1].blueMove.hits === 10) {
+        if(Math.floor(balls[1].ballRadius / 2) !== 0){
+            balls[1].ballRadius = balls[1].ballRadius / 2;
+        }
+        balls[1].blueMove.hits = 0;
+    }
+    if(balls[2].greenMove.hits === 10) {
+        if(Math.floor(balls[2].ballRadius / 2) !== 0){
+            balls[2].ballRadius = balls[2].ballRadius / 2;
+        }
+        balls[2].greenMove.hits = 0;
+    }
+}

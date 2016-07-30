@@ -1,0 +1,28 @@
+<html ng-app="battleship">
+	<head> 
+		<script src="/javascripts/angular/angular.js"></script>
+		<script src="/javascripts/gameController.js"></script>
+		<link rel="stylesheet" href="/stylesheets/style.css" type="text/css" />
+	</head>
+	<body ng-controller="GameController as controller">
+		<header id="navigation" align="center">
+			<fieldset id="heading">
+				<h3>Hello {{controller.currentUser.username}}, you are now logged</h3>
+				<h4>Welcome to game of battle ship</h4>
+			</fieldset>
+		</header>
+		<fieldset id="inviteUsers">
+			<h4>List of users online: </h4>
+			<div>
+				<table class="users" border="1">
+					<tr>
+						<th>Name</th><th>Invitation</th><th></th>
+					</tr>
+					<tr ng-repeat="user in controller.users">
+						<td>{{ user.username }}</td><td><input type="button" value="invite" ng-click="controller.inviteUser(user);";></inupt></td>
+					</tr>
+				</table>
+			</div>
+		</fieldset>
+	</body>
+</html>

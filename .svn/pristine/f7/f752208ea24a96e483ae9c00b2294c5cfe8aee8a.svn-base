@@ -1,0 +1,84 @@
+var context;
+var WIDTH;
+var HEIGHT;
+var intervalId = 10;
+var paddle = new Pad();
+var redBall = new Ball(100, 100);
+var blueBall = new Ball(200, 200);
+var greenBall = new Ball(200, 300);
+
+var startGame = function(canvas) {
+    context = canvas.getContext("2d");
+    WIDTH = canvas.width;
+    HEIGHT = canvas.height;
+    intervalId = setInterval(draw, intervalId);
+	draw();
+};
+
+var createHandler = function(){
+	var mouseMoveHandler = function(mouseEvent){
+	    var relativeX = mouseEvent.clientX - canvas.offsetLeft;
+	    if(relativeX > 0 && relativeX < WIDTH - paddle.paddleProperties.width) {
+			paddle.paddleProperties.start = relativeX;
+		}
+	}
+	return {
+	    mouseMoveHandler: mouseMoveHandler,
+	  };
+}
+
+var drawBalls= function(){
+    redBall.drawBall(redBall.x, redBall.y, redBall.radius, 'red');
+    blueBall.drawBall(blueBall.x, blueBall.y,blueBall.radius , 'blue');
+    greenBall.drawBall(greenBall.x, greenBall.y, greenBall.radius, 'green');	
+}
+
+var drawCanvasBorderLines = function(){
+	drawLine(0, 0, 0, canvas.height);
+	drawLine(0, canvas.height, canvas.width, canvas.height);
+	drawLine(canvas.width, canvas.height, canvas.width, 0);
+}
+var drawLine = function(moveToX, moveToY, lineToX, lineToY) {
+	context.beginPath();
+	context.moveTo(moveToX, moveToY);
+	context.lineTo(lineToX, lineToY);
+	context.strokeStyle = 'DarkOliveGreen';
+	context.lineWidth = 5;
+	context.stroke();
+};
+
+var draw = function() {
+    context.clearRect(0, 0, WIDTH, HEIGHT);
+	
+    paddle.draw_pad(paddle.paddleProperties.start, paddle.paddleProperties.end, 
+		paddle.paddleProperties.width, paddle.paddleProperties.height, 'black');
+		
+	drawCanvasBorderLines();
+	drawBalls();
+	
+	redBall.hittingTheWalls(redBall, WIDTH, redBall.redCenter);
+	blueBall.hittingTheWalls(blueBall, WIDTH, redBall.redCenter);
+	greenBall.hittingTheWalls(greenBall, WIDTH, redBall.redCenter);
+	
+	redBall.x = redBall.x + redBall.xDisplacement ;
+	redBall.y = redBall.y + redBall.yDisplacement ;
+	blueBall.x = blueBall.x + blueBall.xDisplacement ;
+	blueBall.y = blueBall.y - blueBall.yDisplacement ;
+	greenBall.x = greenBall.x - greenBall.xDisplacement ;
+	greenBall.y = greenBall.y - greenBall.yDisplacement ;
+	
+	endGame();
+
+}
+
+var endGame = function(){
+    if(redBall.clearBall === true && 
+		blueBall.clearBall === true && 
+		greenBall.clearBall === true){
+        context.clearRect(0, 0, WIDTH, HEIGHT);
+	    paddle.draw_pad(paddle.paddleProperties.start, paddle.paddleProperties.end, 
+			paddle.paddleProperties.width, paddle.paddleProperties.height, 'black');
+		drawCanvasBorderLines();
+        clearTimeout(intervalId);
+    }
+}

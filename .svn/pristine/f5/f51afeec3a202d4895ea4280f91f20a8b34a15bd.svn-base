@@ -1,0 +1,14 @@
+[Venkat 08/08/15 07:14 AM CDT]
+review: good start
+
+1. Visited page, entered Joe, seeing welcome page.
+
+2. Visited using another browser, entered Bob, seeing Joe in the welcome page.
+
+3. Joe should see Bob now. Also, when Bob clicks invite, nothing is happening.
+
+In jade file, don't write raw HTML!
+
+Check coverage.
+
+------------------------------------------------------------------------------

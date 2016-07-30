@@ -1,0 +1,53 @@
+var context;
+var intervalId = 0;
+var box = new Box();
+var pad = new Pad();
+var balls = [new Ball(), new Ball(), new Ball()];
+
+var initContextAndPad = function(){
+    context = canvas.getContext("2d");
+    pad.draw_pad(pad.paddlex, 0, pad.paddlew, pad.paddleh, 'black');
+}
+
+var startGameOnClick = function(event){
+    initBallsCenters(balls);
+    intervalId = setInterval(draw, 100);
+}
+
+var mouseMoveHandler = function(event){
+    var relativeX = event.clientX - canvas.offsetLeft;
+    if(relativeX > pad.paddlew / 2 && relativeX < canvas.width - pad.paddlew / 2) {
+        pad.paddlex = relativeX - pad.paddlew / 2;
+    }
+}
+
+var draw = function() {
+    context.clearRect(0, 0, box.WIDTH, box.HEIGHT);
+    if(balls[0].clearBall === false) {
+        balls[0].draw_ball(balls[0].redCenter.x, balls[0].redCenter.y, balls[0].ballRadius, 'red');
+        balls[0].hittingTheRightAndLeftWalls(box.WIDTH, balls[0].redCenter, balls[0].redMove, pad);
+        balls[0].hittingTheTopAndBottomWalls(box.HEIGHT, balls[0].redCenter, balls[0].redMove, pad);
+    }
+    if(balls[1].clearBall === false) {
+        balls[1].draw_ball(balls[1].blueCenter.x, balls[1].blueCenter.y, balls[1].ballRadius, 'blue');
+        balls[1].hittingTheRightAndLeftWalls(box.WIDTH, balls[1].blueCenter, balls[1].blueMove, pad);
+        balls[1].hittingTheTopAndBottomWalls(box.HEIGHT, balls[1].blueCenter, balls[1].blueMove, pad);
+    }
+    if(balls[2].clearBall === false) {
+        balls[2].draw_ball(balls[2].greenCenter.x, balls[2].greenCenter.y, balls[2].ballRadius, 'green');
+        balls[2].hittingTheRightAndLeftWalls(box.WIDTH, balls[2].greenCenter, balls[2].greenMove, pad);
+        balls[2].hittingTheTopAndBottomWalls(box.HEIGHT, balls[2].greenCenter, balls[2].greenMove, pad);
+    }
+
+    pad.checkForThePadHits(balls);
+    pad.draw_pad(pad.paddlex, 0, pad.paddlew, pad.paddleh, 'black');
+    exitGame();
+}
+
+var exitGame = function(){
+    if(balls[0].clearBall === true && balls[1].clearBall === true && balls[2].clearBall === true){
+        context.clearRect(0, 0, box.WIDTH, box.HEIGHT);
+        pad.draw_pad(pad.paddlex, 0, pad.paddlew, pad.paddleh, 'black');
+        clearTimeout(intervalId);
+    }
+}

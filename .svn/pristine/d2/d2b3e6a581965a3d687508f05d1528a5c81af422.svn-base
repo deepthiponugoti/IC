@@ -1,0 +1,24 @@
+<!doctype html>
+
+<html>
+<body>
+	<header id="navigation">
+		<section>
+			<article>
+				<h3>Submit Work Order</h3>
+				<form id="workorder" action="/workorder" method="post">
+					<fieldset id="bookaride">
+						<label>Person Creating Work Order</label>
+						<input name="nameOfPerson" required type="text"></input>
+						<br></br>
+						<label>Work Description:</label>
+						<textarea required name="workDesc" rows="4" cols="50" maxlength="300"></textarea>
+						<br></br>
+					</fieldset>
+					<input value="Submit Order" type="submit"></input>
+				</form>
+			</article>
+		</section>
+	</header>
+</body>
+</html>

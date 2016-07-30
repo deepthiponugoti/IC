@@ -1,0 +1,92 @@
+var context;
+var centre;
+var WIDTH;
+var HEIGHT;
+var intervalId = 0;
+var circleRadius = 10;
+
+var startGame = function(canvas) {
+    context = canvas.getContext("2d");
+    WIDTH = canvas.width;
+    HEIGHT = canvas.height;
+    centre = {
+        x: WIDTH/2,
+        y: HEIGHT/2
+    }
+    intervalId = setInterval(draw, 10);
+}
+
+var draw_circle = function(x,y,r) {
+    context.beginPath();
+    context.arc(x, y, r, 0, Math.PI*2, true);
+    context.closePath();
+    context.fill();
+}
+
+var draw_rect = function(x,y,w,h) {
+    context.beginPath();
+    context.rect(x,y,w,h);
+    context.closePath();
+    context.fill();
+}
+
+var paddleMove = {
+    x: 2,
+    y: 4
+}
+
+var paddlex;
+var paddleh;
+var paddlew;
+
+var init_paddle = function() {
+    paddlex = WIDTH / 2;
+    paddleh = 10;
+    paddlew = 120;
+}
+
+var rightDown = false;
+var leftDown = false;
+
+var mouseHandler = function(e){
+    var relativeX = e.clientX - canvas.offsetLeft;
+    if(relativeX > 0 && relativeX < canvas.width) {
+        paddlex = relativeX - paddlew/2;
+    }
+}
+
+var onKeyDown = function(evt) {
+    if (evt.keyCode == 39) rightDown = true;
+    else if (evt.keyCode == 37) leftDown = true;
+}
+
+var onKeyUp = function(evt) {
+    if (evt.keyCode == 39) rightDown = false;
+    else if (evt.keyCode == 37) leftDown = false;
+}
+
+var draw = function() {
+    context.clearRect(0, 0, WIDTH, HEIGHT);
+    draw_circle(centre.x, centre.y, circleRadius);
+
+    if (rightDown) paddlex += 5;
+    else if (leftDown) paddlex -= 5;
+    draw_rect(paddlex, 0, paddlew, paddleh);
+
+    if (centre.x + paddleMove.x > WIDTH - circleRadius || centre.x + paddleMove.x < circleRadius)
+        paddleMove.x = -paddleMove.x;
+
+    if (centre.y + paddleMove.y > HEIGHT - circleRadius)
+        paddleMove.y = -paddleMove.y;
+    else if (centre.y + paddleMove.y < circleRadius) {
+        if (centre.x > paddlex && centre.x < paddlex + paddlew)
+            paddleMove.y = -paddleMove.y;
+        else {
+            clearInterval(intervalId);
+            document.location.reload();
+        }
+    }
+
+    centre.x += paddleMove.x;
+    centre.y += paddleMove.y;
+}
